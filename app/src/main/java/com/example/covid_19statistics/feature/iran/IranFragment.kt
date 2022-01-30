@@ -159,7 +159,7 @@ class IranFragment : CovidAppFragment() {
                 val jsonCases = jsonDate.getJSONObject("cases")
                 val jsonRecovered = jsonDate.getJSONObject("recovered")
                 val jsonDeaths = jsonDate.getJSONObject("deaths")
-
+//
                 for (i in 0..9) {
                     val history = History()
                     val date: String? = setHistoriesDate(i + 1)
