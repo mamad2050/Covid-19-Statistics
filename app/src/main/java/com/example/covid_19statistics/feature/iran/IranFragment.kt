@@ -18,6 +18,9 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.formatter.DefaultValueFormatter
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -25,6 +28,7 @@ import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 
 class IranFragment : CovidAppFragment() {
@@ -90,7 +94,7 @@ class IranFragment : CovidAppFragment() {
                     }
                 } else {
                     if (it.todayCases != null) {
-                        entries.add(BarEntry(11f, it.todayCases!!.toFloat()))
+                        entries.add(BarEntry(11f, it.todayCases.toFloat()))
                         deathEntries.add(BarEntry(11f, it.todayDeaths!!.toFloat()))
                     }
                 }
@@ -132,7 +136,7 @@ class IranFragment : CovidAppFragment() {
         val yAxis2 = barChart.axisRight
         yAxis2.isEnabled = false
 
-
+        barDataSet.valueFormatter = DefaultValueFormatter(0)
 
         barChart.setDrawBorders(false)
         barChart.setDrawGridBackground(false)
