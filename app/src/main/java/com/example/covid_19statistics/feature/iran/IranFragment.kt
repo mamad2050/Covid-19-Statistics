@@ -80,7 +80,7 @@ class IranFragment : CovidAppFragment() {
 
             viewModel.iranYesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
-                if (!histories[0].cases!!.equals(yesterday.todayCases)) {
+                if (histories[0].cases != yesterday.todayCases.toString()) {
                     entries.add(BarEntry(11f, yesterday.todayCases!!.toFloat()))
                     deathEntries.add(BarEntry(11f, yesterday.todayDeaths!!.toFloat()))
 
@@ -160,7 +160,7 @@ class IranFragment : CovidAppFragment() {
                 val jsonRecovered = jsonDate.getJSONObject("recovered")
                 val jsonDeaths = jsonDate.getJSONObject("deaths")
 
-                for (i in 0..8) {
+                for (i in 0..9) {
                     val history = History()
                     val date: String? = setHistoriesDate(i + 1)
                     history.cases = jsonCases.getString(date)
