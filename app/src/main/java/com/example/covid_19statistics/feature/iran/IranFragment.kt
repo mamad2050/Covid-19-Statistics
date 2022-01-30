@@ -135,7 +135,8 @@ class IranFragment : CovidAppFragment() {
         yAxis.isEnabled = false
         val yAxis2 = barChart.axisRight
         yAxis2.isEnabled = false
-
+        barDataSet.valueTextSize = 12f
+        barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 
         barChart.setDrawBorders(false)
