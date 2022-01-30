@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/globalFragment"
+        android:title="@string/global" />
+
+    <item android:id="@+id/iranFragment"
+        android:title="@string/iran" />
+
+    <item android:id="@+id/countriesFragment"
+        android:title="@string/countries" />
+
+</menu>
