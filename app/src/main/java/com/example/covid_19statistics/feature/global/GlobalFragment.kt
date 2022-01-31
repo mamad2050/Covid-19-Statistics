@@ -2,7 +2,6 @@ package com.example.covid_19statistics.feature.global
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,15 +13,19 @@ import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
 import com.example.covid_19statistics.services.http.ApiCreator
+import com.example.covid_19statistics.view.MyValueFormatter
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
+import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
+
 
 class GlobalFragment : CovidAppFragment() {
 
@@ -107,17 +110,24 @@ class GlobalFragment : CovidAppFragment() {
 
 
     private fun initialBarChart(barChart: BarChart, entries: ArrayList<BarEntry>, color: Int) {
+
         val barDataSet = BarDataSet(entries, "Statistics")
         barDataSet.setGradientColor(Color.WHITE, color)
+        barDataSet.valueTextSize = 11f
+        barDataSet.valueTypeface = binding.tvCountryName.typeface
+        barDataSet.valueFormatter = DefaultValueFormatter(0)
+
+        if (color == Color.YELLOW){
+        barDataSet.valueFormatter = LargeValueFormatter()
+        }
+
         val barData = BarData(barDataSet)
         barData.barWidth = 0.25f
         barData.setValueTextColor(Color.WHITE)
-        barData.setValueTextSize(10f)
+
         barChart.animateY(500)
         barChart.rotation = 360f
         barChart.destroyDrawingCache()
-        barChart.setBorderColor(Color.WHITE)
-        barChart.setBackgroundColor(Color.TRANSPARENT)
         barChart.setBackgroundResource(R.drawable.bg_chart)
         barChart.data = barData
         val xAxis = barChart.xAxis
@@ -126,15 +136,11 @@ class GlobalFragment : CovidAppFragment() {
         yAxis.isEnabled = false
         val yAxis2 = barChart.axisRight
         yAxis2.isEnabled = false
-        barDataSet.valueTextSize = 8f
-        barDataSet.valueTypeface = binding.tvCountryName.typeface
-        barDataSet.valueFormatter = DefaultValueFormatter(0)
 
         barChart.setDrawBorders(false)
         barChart.setDrawGridBackground(false)
         barChart.legend.isEnabled = false
         barChart.description.isEnabled = false
-        barChart.setTouchEnabled(true)
         barChart.isDragEnabled = false
         barChart.setScaleEnabled(false)
         barChart.setPinchZoom(false)

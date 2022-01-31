@@ -21,16 +21,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
 
                         android:id="@+id/iv_country"
-                        android:layout_width="42dp"
-                        android:layout_height="30dp"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
                         android:layout_marginVertical="12dp"
                         android:layout_marginStart="8dp"
-                        android:background="@drawable/bg_iv_country"
                         android:padding="1dp"
-                        android:scaleType="fitXY"
                         android:src="@drawable/iran" />
 
                     <TextView
@@ -39,9 +37,9 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="8dp"
-                        android:textSize="18sp"
+                        android:textSize="16sp"
                         android:textStyle="bold"
-                        android:text="ایران" />
+                        android:text="@string/iran" />
 
                 </LinearLayout>
 
