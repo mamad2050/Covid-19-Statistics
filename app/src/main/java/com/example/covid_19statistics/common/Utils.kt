@@ -11,6 +11,8 @@ import androidx.dynamicanimation.animation.SpringForce
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import saman.zamani.persiandate.PersianDate
+import saman.zamani.persiandate.PersianDateFormat
 import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
@@ -62,8 +64,8 @@ fun decimalFormatter(num: String): String {
     return decimalFormat.format(num.toInt())
 }
 
-fun valueAnimator(num: String , tv : TextView ) {
-    val valueAnimator = ValueAnimator.ofInt(0,num.toInt())
+fun valueAnimator(num: String, tv: TextView) {
+    val valueAnimator = ValueAnimator.ofInt(0, num.toInt())
     valueAnimator.duration = 1000
     valueAnimator.addUpdateListener {
         tv.text = decimalFormatter(it.animatedValue.toString())
@@ -76,7 +78,7 @@ fun <T> Single<T>.asyncNetworkRequest(): Single<T> {
 }
 
 
- fun setHistoriesDate(i: Int): String? {
+fun setHistoriesDate(i: Int): String? {
     val now = Date()
     val calendar = Calendar.getInstance()
     calendar.time = now
@@ -84,5 +86,16 @@ fun <T> Single<T>.asyncNetworkRequest(): Single<T> {
     val date = calendar.time
     val simpleDateFormat = SimpleDateFormat("M/d/yy")
     return simpleDateFormat.format(date)
+}
+
+
+fun convertMsToDate(dateMs: Long): String {
+
+    val persianDate = PersianDate(dateMs)
+    val pDateFormatter = PersianDateFormat("Y/m/d")
+
+    val pTimeFormatter = PersianDateFormat("H:m:s")
+
+    return pDateFormatter.format( persianDate) + " ساعت " + pTimeFormatter.format(persianDate);
 }
 

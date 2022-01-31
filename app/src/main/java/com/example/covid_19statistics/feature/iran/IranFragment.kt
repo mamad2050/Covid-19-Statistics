@@ -59,6 +59,9 @@ class IranFragment : CovidAppFragment() {
             valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
             valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
 
+
+            binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
+
             if (it.todayCases != null)
                 valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
             else

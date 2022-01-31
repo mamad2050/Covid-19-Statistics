@@ -20,6 +20,10 @@ class MainActivity : CovidAppActivity() {
         val navController = findNavController(R.id.fragment)
         binding.bottomNavigationView.setupWithNavController(navController)
 
+        binding.bottomNavigationView.setOnNavigationItemReselectedListener {
+
+        }
+
     }
 
 }

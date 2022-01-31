@@ -13,9 +13,7 @@ import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
 import com.example.covid_19statistics.services.http.ApiCreator
-import com.example.covid_19statistics.view.MyValueFormatter
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -59,6 +57,8 @@ class GlobalFragment : CovidAppFragment() {
             valueAnimator(it.cases.toString(), binding.tvAllCases)
             valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
             valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
+
+            binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 
             if (it.todayCases != null)
                 valueAnimator(it.todayCases.toString(), binding.tvTodayCases)

@@ -27,8 +27,8 @@
 
                 <ImageView
                     android:id="@+id/iv_country"
-                    android:layout_width="42dp"
-                    android:layout_height="30dp"
+                    android:layout_width="34dp"
+                    android:layout_height="24dp"
                     android:layout_marginVertical="12dp"
                     android:layout_marginStart="8dp"
                     android:background="@drawable/bg_iv_country"
@@ -46,7 +46,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="8dp"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     tools:text="ایران" />
 
@@ -112,9 +112,8 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="8dp"
-
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/statistic_size"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -145,7 +144,7 @@
                                 android:layout_marginTop="4dp"
 
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/statistic_size"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -174,7 +173,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/statistic_size"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -219,9 +218,8 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="8dp"
-
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/statistic_size"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -250,9 +248,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
-
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/statistic_size"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
@@ -281,7 +278,7 @@
                                 android:layout_gravity="center"
                                 android:layout_marginTop="4dp"
                                 android:gravity="center"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/statistic_size"
                                 android:textStyle="bold" />
 
                         </LinearLayout>
