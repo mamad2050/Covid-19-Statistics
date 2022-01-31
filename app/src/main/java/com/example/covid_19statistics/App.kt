@@ -17,6 +17,8 @@ import com.example.covid_19statistics.services.http.createApiServiceInstance
 import com.example.covid_19statistics.services.imageloader.FrescoImageLoadingService
 import com.example.covid_19statistics.services.imageloader.ImageLoadingService
 import com.facebook.drawee.backends.pipeline.Fresco
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.core.context.startKoin
@@ -26,6 +28,8 @@ import timber.log.Timber
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+
+
 
         Fresco.initialize(this)
 
@@ -50,5 +54,18 @@ class App : Application() {
             modules(myModules)
         }
 
+        RxJavaPlugins.setErrorHandler { e ->
+            if (e is UndeliverableException) {
+                // Merely log undeliverable exceptions
+                Timber.e(e.message)
+            } else {
+                // Forward all others to current thread's uncaught exception handler
+                Thread.currentThread().also { thread ->
+                    thread.uncaughtExceptionHandler.uncaughtException(thread, e)
+                }
+            }
+
+        }
     }
+
 }

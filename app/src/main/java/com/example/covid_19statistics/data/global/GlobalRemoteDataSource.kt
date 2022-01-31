@@ -9,5 +9,7 @@ class GlobalRemoteDataSource(private val apiService: ApiService):GlobalDataSourc
 
     override fun getGlobal(): Single<Global> = apiService.getGlobal()
 
+    override fun getGlobalYesterday(): Single<Global> = apiService.getGlobalYesterday()
+
 
 }

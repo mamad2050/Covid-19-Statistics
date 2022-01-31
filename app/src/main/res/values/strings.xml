@@ -7,4 +7,12 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search">جستجوی کشور</string>
     <string name="not_declare">اعلام نشده</string>
+    <string name="today_statistic">آمار امروز</string>
+    <string name="cases">مبتلایان</string>
+    <string name="recovered">بهبود یافتگان</string>
+    <string name="deaths">فوت شدگان</string>
+    <string name="all_statistic">آمار کلی</string>
+    <string name="all_cases">کل مبتلایان</string>
+    <string name="all_recovered">کل بهبود یافتگان</string>
+    <string name="all_deaths">کل فوت شدگان</string>
 </resources>

@@ -5,6 +5,9 @@ import io.reactivex.Single
 
 class GlobalRepositoryImpl(private val globalRemoteDataSource: GlobalDataSource) :
     GlobalRepository {
+
     override fun getGlobal(): Single<Global> = globalRemoteDataSource.getGlobal()
+
+    override fun getGlobalYesterday(): Single<Global> = globalRemoteDataSource.getGlobalYesterday()
 
 }

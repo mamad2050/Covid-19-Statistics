@@ -7,7 +7,7 @@
     tools:context=".feature.iran.IranFragment">
 
     <ScrollView
-        android:layout_below="@id/day_chooser"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -62,7 +62,7 @@
                     android:layout_below="@id/divider"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:text="آمار امروز"
+                    android:text="@string/today_statistic"
                     android:textStyle="bold"
                     android:textSize="14sp" />
 
@@ -101,7 +101,7 @@
                                     android:layout_marginTop="8dp"
 
                                     android:gravity="center"
-                                    android:text="مبتلایان"
+                                    android:text="@string/cases"
                                     android:textColor="#FFEB3B"
                                     android:textStyle="bold" />
 
@@ -132,7 +132,7 @@
                                     android:layout_marginTop="8dp"
 
                                     android:gravity="center"
-                                    android:text="بهبود یافتگان"
+                                    android:text="@string/recovered"
                                     android:textColor="#5AC65E"
                                     android:textStyle="bold" />
 
@@ -162,7 +162,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="8dp"
                                     android:gravity="center"
-                                    android:text="فوت شدگان"
+                                    android:text="@string/deaths"
                                     android:textColor="#DD366F"
                                     android:textStyle="bold" />
 
@@ -188,7 +188,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/today_statistics_card"
                     android:layout_marginStart="8dp"
-                    android:text="آمار کلی"
+                    android:text="@string/all_statistic"
                     android:textStyle="bold"
                     android:textSize="14sp"/>
 
@@ -227,7 +227,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="8dp"
                                     android:gravity="center"
-                                    android:text="کل مبتلایان"
+                                    android:text="@string/all_cases"
                                     android:textColor="#FFEB3B"
                                     android:textStyle="bold" />
 
@@ -258,7 +258,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="8dp"
                                     android:gravity="center"
-                                    android:text="کل بهبود یافتگان"
+                                    android:text="@string/all_recovered"
                                     android:textColor="#5AC65E"
                                     android:textStyle="bold" />
 
@@ -287,7 +287,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="8dp"
                                     android:gravity="center"
-                                    android:text="کل فوت شدگان"
+                                    android:text="@string/all_deaths"
                                     android:textColor="#DD366F"
                                     android:textStyle="bold" />
 

@@ -13,6 +13,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 @SuppressLint("ClickableViewAccessibility")
@@ -73,4 +75,14 @@ fun <T> Single<T>.asyncNetworkRequest(): Single<T> {
     return subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
 
+
+ fun setHistoriesDate(i: Int): String? {
+    val now = Date()
+    val calendar = Calendar.getInstance()
+    calendar.time = now
+    calendar.add(Calendar.DAY_OF_MONTH, -i - 1)
+    val date = calendar.time
+    val simpleDateFormat = SimpleDateFormat("M/d/yy")
+    return simpleDateFormat.format(date)
+}
 

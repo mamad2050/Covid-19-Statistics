@@ -13,22 +13,16 @@ import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentIranBinding
 import com.example.covid_19statistics.services.http.ApiCreator
-import com.example.covid_19statistics.view.RoundedBarChart
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
-import com.github.mikephil.charting.formatter.IAxisValueFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.roundToInt
 
 
 class IranFragment : CovidAppFragment() {
@@ -100,11 +94,8 @@ class IranFragment : CovidAppFragment() {
                 }
 
                 initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-                initialBarChart(
-                    binding.barchartDeaths,
-                    deathEntries,
-                    Color.RED
-                )
+
+                initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
 
             }
         }
@@ -153,19 +144,15 @@ class IranFragment : CovidAppFragment() {
 
     private fun getHistory() {
 
-        val urlHistory =
-            "https://disease.sh/v3/covid-19/historical/iran?lastdays=$daysAgo"
-
-
-        val stringRequest = StringRequest(Request.Method.GET, urlHistory, { response ->
+        val stringRequest = StringRequest(Request.Method.GET, urlIranHistory, { response ->
             try {
                 val jsonObject = JSONObject(response)
-                val jsonDate: JSONObject = jsonObject.getJSONObject("timeline")
+                val jsonDate = jsonObject.getJSONObject("timeline")
                 val jsonCases = jsonDate.getJSONObject("cases")
                 val jsonRecovered = jsonDate.getJSONObject("recovered")
                 val jsonDeaths = jsonDate.getJSONObject("deaths")
 
-                for (i in 0..9) {
+                for (i in 0..daysAgo.toInt()-2) {
                     val history = History()
                     val date: String? = setHistoriesDate(i + 1)
                     history.cases = jsonCases.getString(date)
@@ -203,16 +190,6 @@ class IranFragment : CovidAppFragment() {
 
         }) { error -> Timber.e(error.message) }
         requestQueue.add(stringRequest)
-    }
-
-    private fun setHistoriesDate(i: Int): String? {
-        val now = Date()
-        val calendar = Calendar.getInstance()
-        calendar.time = now
-        calendar.add(Calendar.DAY_OF_MONTH, -i - 1)
-        val date = calendar.time
-        val simpleDateFormat = SimpleDateFormat("M/d/yy")
-        return simpleDateFormat.format(date)
     }
 
 }

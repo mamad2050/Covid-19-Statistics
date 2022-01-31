@@ -26,10 +26,11 @@ interface ApiService {
     @GET("all")
     fun getGlobal():Single<Global>
 
+    @GET("all?yesterday=1&allowNull=1")
+    fun getGlobalYesterday():Single<Global>
+
     @GET("historical/iran?lastdays=$daysAgo")
     fun getIranHistory():Single<List<History>>
-
-
 
 }
 

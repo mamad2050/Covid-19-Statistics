@@ -5,4 +5,8 @@ import io.reactivex.Single
 
 interface GlobalDataSource {
     fun getGlobal(): Single<Global>
+
+    fun getGlobalYesterday(): Single<Global>
+
+
 }
