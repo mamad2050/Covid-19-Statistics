@@ -327,12 +327,12 @@
 
                 <com.example.covid_19statistics.view.RoundedBarChart
                     android:id="@+id/barchart_cases"
-                    app:radius="8dp"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
                     android:layout_below="@id/tv5"
                     android:layout_marginHorizontal="8dp"
-                    android:background="@drawable/bg_chart" />
+                    android:background="@drawable/bg_chart"
+                    app:radius="8dp" />
 
 
                 <TextView
@@ -350,11 +350,12 @@
                 <com.example.covid_19statistics.view.RoundedBarChart
                     android:id="@+id/barchart_deaths"
                     android:layout_width="match_parent"
-                    app:radius="4dp"
                     android:layout_height="200dp"
                     android:layout_below="@id/tv6"
+                    android:layout_marginBottom="16dp"
                     android:layout_marginHorizontal="8dp"
-                    android:background="@drawable/bg_chart" />
+                    android:background="@drawable/bg_chart"
+                    app:radius="4dp" />
 
 
             </RelativeLayout>

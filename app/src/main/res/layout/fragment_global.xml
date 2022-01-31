@@ -350,6 +350,7 @@
                 android:id="@+id/barchart_deaths"
                 android:layout_width="match_parent"
                 app:radius="4dp"
+                android:layout_marginBottom="16dp"
                 android:layout_height="200dp"
                 android:layout_below="@id/tv6"
                 android:layout_marginHorizontal="8dp"

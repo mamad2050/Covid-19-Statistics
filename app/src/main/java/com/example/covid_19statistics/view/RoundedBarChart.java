@@ -23,6 +23,8 @@ import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.Utils;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
+import timber.log.Timber;
+
 public class RoundedBarChart extends BarChart {
     public RoundedBarChart(Context context) {
         super(context);
@@ -38,7 +40,7 @@ public class RoundedBarChart extends BarChart {
         readRadiusAttr(context, attrs);
     }
 
-    private void readRadiusAttr(Context context, AttributeSet attrs){
+    private void readRadiusAttr(Context context, AttributeSet attrs) {
         TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.RoundedBarChart, 0, 0);
         try {
             setRadius(a.getDimensionPixelSize(R.styleable.RoundedBarChart_radius, 0));
@@ -161,71 +163,76 @@ public class RoundedBarChart extends BarChart {
                     c.drawRoundRect(mBarShadowRectBuffer, mRadius, mRadius, mShadowPaint);
                 }
             }
+            try {
+                BarBuffer buffer = mBarBuffers[index];
+                buffer.setPhases(phaseX, phaseY);
+                buffer.setDataSet(index);
+                buffer.setInverted(mChart.isInverted(dataSet.getAxisDependency()));
+                buffer.setBarWidth(mChart.getBarData().getBarWidth());
 
-            // initialize the buffer
-            BarBuffer buffer = mBarBuffers[index];
-            buffer.setPhases(phaseX, phaseY);
-            buffer.setDataSet(index);
-            buffer.setInverted(mChart.isInverted(dataSet.getAxisDependency()));
-            buffer.setBarWidth(mChart.getBarData().getBarWidth());
+                buffer.feed(dataSet);
 
-            buffer.feed(dataSet);
+                // initialize the buffer
 
-            trans.pointValuesToPixel(buffer.buffer);
 
-            final boolean isSingleColor = dataSet.getColors().size() == 1;
+                trans.pointValuesToPixel(buffer.buffer);
 
-            if (isSingleColor) {
-                mRenderPaint.setColor(dataSet.getColor());
-            }
+                final boolean isSingleColor = dataSet.getColors().size() == 1;
 
-            for (int j = 0; j < buffer.size(); j += 4) {
-
-                if (!mViewPortHandler.isInBoundsLeft(buffer.buffer[j + 2]))
-                    continue;
-
-                if (!mViewPortHandler.isInBoundsRight(buffer.buffer[j]))
-                    break;
-
-                if (!isSingleColor) {
-                    // Set the color for the currently drawn value. If the index
-                    // is out of bounds, reuse colors.
-                    mRenderPaint.setColor(dataSet.getColor(j / 4));
+                if (isSingleColor) {
+                    mRenderPaint.setColor(dataSet.getColor());
                 }
 
-                if (dataSet.getGradientColor() != null) {
-                    GradientColor gradientColor = dataSet.getGradientColor();
-                    mRenderPaint.setShader(
-                            new LinearGradient(
-                                    buffer.buffer[j],
-                                    buffer.buffer[j + 3],
-                                    buffer.buffer[j],
-                                    buffer.buffer[j + 1],
-                                    gradientColor.getStartColor(),
-                                    gradientColor.getEndColor(),
-                                    android.graphics.Shader.TileMode.MIRROR));
-                }
+                for (int j = 0; j < buffer.size(); j += 4) {
 
-                if (dataSet.getGradientColors() != null) {
-                    mRenderPaint.setShader(
-                            new LinearGradient(
-                                    buffer.buffer[j],
-                                    buffer.buffer[j + 3],
-                                    buffer.buffer[j],
-                                    buffer.buffer[j + 1],
-                                    dataSet.getGradientColor(j / 4).getStartColor(),
-                                    dataSet.getGradientColor(j / 4).getEndColor(),
-                                    android.graphics.Shader.TileMode.MIRROR));
-                }
+                    if (!mViewPortHandler.isInBoundsLeft(buffer.buffer[j + 2]))
+                        continue;
+
+                    if (!mViewPortHandler.isInBoundsRight(buffer.buffer[j]))
+                        break;
+
+                    if (!isSingleColor) {
+                        // Set the color for the currently drawn value. If the index
+                        // is out of bounds, reuse colors.
+                        mRenderPaint.setColor(dataSet.getColor(j / 4));
+                    }
+
+                    if (dataSet.getGradientColor() != null) {
+                        GradientColor gradientColor = dataSet.getGradientColor();
+                        mRenderPaint.setShader(
+                                new LinearGradient(
+                                        buffer.buffer[j],
+                                        buffer.buffer[j + 3],
+                                        buffer.buffer[j],
+                                        buffer.buffer[j + 1],
+                                        gradientColor.getStartColor(),
+                                        gradientColor.getEndColor(),
+                                        android.graphics.Shader.TileMode.MIRROR));
+                    }
+
+                    if (dataSet.getGradientColors() != null) {
+                        mRenderPaint.setShader(
+                                new LinearGradient(
+                                        buffer.buffer[j],
+                                        buffer.buffer[j + 3],
+                                        buffer.buffer[j],
+                                        buffer.buffer[j + 1],
+                                        dataSet.getGradientColor(j / 4).getStartColor(),
+                                        dataSet.getGradientColor(j / 4).getEndColor(),
+                                        android.graphics.Shader.TileMode.MIRROR));
+                    }
 
 
-                c.drawRoundRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
-                        buffer.buffer[j + 3], mRadius, mRadius, mRenderPaint);
-
-                if (drawBorder) {
                     c.drawRoundRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
-                            buffer.buffer[j + 3], mRadius, mRadius, mBarBorderPaint);
+                            buffer.buffer[j + 3], mRadius, mRadius, mRenderPaint);
+
+                    if (drawBorder) {
+                        c.drawRoundRect(buffer.buffer[j], buffer.buffer[j + 1], buffer.buffer[j + 2],
+                                buffer.buffer[j + 3], mRadius, mRadius, mBarBorderPaint);
+                    }
                 }
+            }catch (ArrayIndexOutOfBoundsException e){
+                Timber.e(e);
             }
         }
     }
