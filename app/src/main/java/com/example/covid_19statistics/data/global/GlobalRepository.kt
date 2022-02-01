@@ -8,7 +8,7 @@ interface GlobalRepository {
 
     fun getGlobal(): Single<Global>
 
-    fun getGlobalYesterday(): Single<Global>
+    fun getYesterdayStatistic(): Single<Global>
 
-    fun getGlobalHistory(): Single<JsonObject>
+    fun getHistory(location : String): Single<JsonObject>
 }

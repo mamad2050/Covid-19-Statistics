@@ -12,7 +12,7 @@ interface IranDataSource {
 
     fun getIran(): Single<Country>
 
-    fun getIranYesterday(): Single<Country>
+    fun getYesterday(): Single<Country>
 
-    fun getIranHistory():Single<JsonObject>
+    fun getHistory(location:String):Single<JsonObject>
 }

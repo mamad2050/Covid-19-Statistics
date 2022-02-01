@@ -115,7 +115,7 @@ class IranFragment : CovidAppFragment() {
 
 
 
-            viewModel.iranYesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
+            viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
                 if (histories[0].cases != yesterday.todayCases.toString()) {
                     entries.add(BarEntry(11f, yesterday.todayCases!!.toFloat()))

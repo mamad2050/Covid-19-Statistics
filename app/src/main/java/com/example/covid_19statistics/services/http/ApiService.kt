@@ -15,6 +15,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ApiService {
 
@@ -22,22 +24,19 @@ interface ApiService {
     fun getCountries(): Single<List<Country>>
 
     @GET("countries/ir?allowNull=1")
-    fun getIran():Single<Country>
+    fun getIran(): Single<Country>
 
     @GET("countries/iran?yesterday=1&allowNull=1")
-    fun getIranYesterday():Single<Country>
-
-    @GET("all")
-    fun getGlobal():Single<Global>
+    fun getYesterday(): Single<Country>
 
     @GET("all?yesterday=1&allowNull=1")
-    fun getGlobalYesterday():Single<Global>
+    fun getGlobalYesterday(): Single<Global>
 
-    @GET("historical/iran?lastdays=$daysAgo")
-    fun getIranHistory():Single<JsonObject>
+    @GET("all")
+    fun getGlobal(): Single<Global>
 
-    @GET("historical/all?lastdays=$daysAgo")
-    fun getGlobalHistory():Single<JsonObject>
+    @GET("historical/{location}?lastdays=$daysAgo")
+    fun getHistory(@Path("location") location: String): Single<JsonObject>
 
 }
 

@@ -21,8 +21,7 @@ class GlobalViewModel(
     init {
         progressBarLiveData.value = true
 
-
-        globalRepository.getGlobalHistory()
+        globalRepository.getHistory("all")
             .asyncNetworkRequest()
             .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable){
                 override fun onSuccess(t: JsonObject) {
@@ -33,7 +32,7 @@ class GlobalViewModel(
 
         globalRepository.getGlobal()
             .doOnSuccess {
-                globalRepository.getGlobalYesterday()
+                globalRepository.getYesterdayStatistic()
                     .asyncNetworkRequest()
                     .subscribe(object : CovidAppSingleObserver<Global>(compositeDisposable) {
                         override fun onSuccess(t: Global) {

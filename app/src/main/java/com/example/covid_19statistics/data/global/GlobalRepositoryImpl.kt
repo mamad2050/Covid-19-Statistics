@@ -9,8 +9,8 @@ class GlobalRepositoryImpl(private val globalRemoteDataSource: GlobalDataSource)
 
     override fun getGlobal(): Single<Global> = globalRemoteDataSource.getGlobal()
 
-    override fun getGlobalYesterday(): Single<Global> = globalRemoteDataSource.getGlobalYesterday()
+    override fun getYesterdayStatistic(): Single<Global> = globalRemoteDataSource.getYesterdayStatistic()
 
-    override fun getGlobalHistory(): Single<JsonObject> = globalRemoteDataSource.getGlobalHistory()
+    override fun getHistory(location : String): Single<JsonObject> = globalRemoteDataSource.getHistory(location)
 
 }

@@ -8,13 +8,8 @@ import com.example.covid_19statistics.common.asyncNetworkRequest
 import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.iran.IranRepository
 import com.google.gson.JsonObject
-import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import okhttp3.ResponseBody
-import org.json.JSONObject
-import timber.log.Timber
 
 @SuppressLint("CheckResult")
 class IranViewModel(
@@ -23,7 +18,7 @@ class IranViewModel(
 
     val iranLiveData = MutableLiveData<Country>()
 
-    val iranYesterdayLiveData = MutableLiveData<Country>()
+    val yesterdayLiveData = MutableLiveData<Country>()
 
     val historyLiveData = MutableLiveData<JsonObject>()
 
@@ -32,7 +27,7 @@ class IranViewModel(
         progressBarLiveData.value = true
 
 
-        iranRepository.getIranHistory()
+        iranRepository.getHistory("ir")
             .asyncNetworkRequest()
             .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable){
                 override fun onSuccess(t: JsonObject) {
@@ -43,14 +38,11 @@ class IranViewModel(
 
         iranRepository.getIran()
             .doOnSuccess {
-                iranRepository.getIranYesterday()
+                iranRepository.getYesterday()
                     .asyncNetworkRequest()
-                    .doOnSuccess {
-
-                    }
                     .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
                         override fun onSuccess(t: Country) {
-                            iranYesterdayLiveData.value = t
+                            yesterdayLiveData.value = t
                         }
                     })
             }
