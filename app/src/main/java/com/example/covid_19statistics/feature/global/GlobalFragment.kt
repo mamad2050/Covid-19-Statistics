@@ -12,7 +12,6 @@ import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
-import com.example.covid_19statistics.services.http.ApiCreator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -33,7 +32,6 @@ class GlobalFragment : CovidAppFragment() {
     private var histories = ArrayList<History>()
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
-    private lateinit var requestQueue: RequestQueue
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +48,49 @@ class GlobalFragment : CovidAppFragment() {
             setProgressIndicator(it)
         }
 
-        requestQueue = ApiCreator.getRequestQueue(requireContext())!!
+        viewModel.globalHistoryLiveData.observe(viewLifecycleOwner){
+
+            val jsonObject = JSONObject(it.toString())
+            val jsonCases = jsonObject.getJSONObject("cases")
+            val jsonDeaths = jsonObject.getJSONObject("deaths")
+
+            for (i in 0..daysAgo.toInt() - 2) {
+                val history = History()
+                val date: String? = setHistoriesDate(i + 1)
+                history.cases = jsonCases.getString(date)
+                history.deaths = jsonDeaths.getString(date)
+                history.date = date
+                histories.add(history)
+            }
+
+            for (i in 0 until histories.size - 1) {
+
+                histories[i].cases =
+                    (histories[i].cases!!.toInt() - histories[i + 1].cases
+                    !!.toInt()).toString()
+
+                histories[i].deaths =
+                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
+                    !!.toInt()).toString()
+
+                entries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        histories[i].cases!!.toFloat()
+                    )
+                )
+                deathEntries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        histories[i].deaths!!.toFloat()
+                    )
+                )
+            }
+
+
+
+        }
+
 
         viewModel.globalLiveData.observe(viewLifecycleOwner) {
 
@@ -75,8 +115,6 @@ class GlobalFragment : CovidAppFragment() {
             else
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
-            getHistory()
-
             viewModel.globalYesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
                 if (histories[0].cases != yesterday.todayCases.toString()) {
@@ -100,14 +138,12 @@ class GlobalFragment : CovidAppFragment() {
 
             }
         }
-
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
     }
-
 
     private fun initialBarChart(barChart: BarChart, entries: ArrayList<BarEntry>, color: Int) {
 
@@ -148,54 +184,53 @@ class GlobalFragment : CovidAppFragment() {
 
     }
 
-
-    private fun getHistory() {
-
-        val stringRequest = StringRequest(Request.Method.GET, urlGlobalHistory, { response ->
-            try {
-                val jsonObject = JSONObject(response)
-                val jsonCases = jsonObject.getJSONObject("cases")
-                val jsonRecovered = jsonObject.getJSONObject("recovered")
-                val jsonDeaths = jsonObject.getJSONObject("deaths")
-
-                for (i in 0..daysAgo.toInt()-2) {
-                    val history = History()
-                    val date: String? = setHistoriesDate(i + 1)
-                    history.cases = jsonCases.getString(date)
-                    history.recovered = jsonRecovered.getString(date)
-                    history.deaths = jsonDeaths.getString(date)
-                    history.date = date
-                    histories.add(history)
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-            for (i in 0 until histories.size - 1) {
-
-                histories[i].cases =
-                    (histories[i].cases!!.toInt() - histories[i + 1].cases
-                    !!.toInt()).toString()
-
-                histories[i].deaths =
-                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
-                    !!.toInt()).toString()
-
-                entries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].cases!!.toFloat()
-                    )
-                )
-                deathEntries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].deaths!!.toFloat()
-                    )
-                )
-            }
-
-        }) { error -> Timber.e(error) }
-        requestQueue.add(stringRequest)
-    }
+//    private fun getHistory() {
+//
+//        val stringRequest = StringRequest(Request.Method.GET, urlGlobalHistory, { response ->
+//            try {
+//
+//                val jsonObject = JSONObject(response)
+//                val jsonCases = jsonObject.getJSONObject("cases")
+//                val jsonDeaths = jsonObject.getJSONObject("deaths")
+//
+//                for (i in 0..daysAgo.toInt()-2) {
+//                    val history = History()
+//                    val date: String? = setHistoriesDate(i + 1)
+//                    history.cases = jsonCases.getString(date)
+//                    history.recovered = jsonRecovered.getString(date)
+//                    history.deaths = jsonDeaths.getString(date)
+//                    history.date = date
+//                    histories.add(history)
+//                }
+//            } catch (e: JSONException) {
+//                e.printStackTrace()
+//            }
+//            for (i in 0 until histories.size - 1) {
+//
+//                histories[i].cases =
+//                    (histories[i].cases!!.toInt() - histories[i + 1].cases
+//                    !!.toInt()).toString()
+//
+//                histories[i].deaths =
+//                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
+//                    !!.toInt()).toString()
+//
+//                entries.add(
+//                    BarEntry(
+//                        daysAgo.toFloat() - i.toFloat(),
+//                        histories[i].cases!!.toFloat()
+//                    )
+//                )
+//                deathEntries.add(
+//                    BarEntry(
+//                        daysAgo.toFloat() - i.toFloat(),
+//                        histories[i].deaths!!.toFloat()
+//                    )
+//                )
+//            }
+//
+//        }) { error -> Timber.e(error) }
+//        requestQueue.add(stringRequest)
+//    }
 
 }

@@ -5,23 +5,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.StringRequest
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentIranBinding
-import com.example.covid_19statistics.services.http.ApiCreator
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
-import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import kotlin.collections.ArrayList
 
 
@@ -33,7 +27,7 @@ class IranFragment : CovidAppFragment() {
     private var histories = ArrayList<History>()
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
-    private lateinit var requestQueue: RequestQueue
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,11 +40,53 @@ class IranFragment : CovidAppFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        requestQueue = ApiCreator.getRequestQueue(requireContext())!!
-
-
         viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
             setProgressIndicator(it)
+        }
+
+
+        viewModel.historyLiveData.observe(viewLifecycleOwner) {
+
+
+                val jsonObject = JSONObject(it.toString())
+                val jsonDate = jsonObject.getJSONObject("timeline")
+                val jsonCases = jsonDate.getJSONObject("cases")
+                val jsonDeaths = jsonDate.getJSONObject("deaths")
+
+            for (i in 0..daysAgo.toInt() - 2) {
+                val history = History()
+                val date: String? = setHistoriesDate(i + 1)
+                history.cases = jsonCases.getString(date)
+                history.deaths = jsonDeaths.getString(date)
+                history.date = date
+                histories.add(history)
+            }
+
+            for (i in 0 until histories.size - 1) {
+
+                histories[i].cases =
+                    (histories[i].cases!!.toInt() - histories[i + 1].cases
+                    !!.toInt()).toString()
+
+                histories[i].deaths =
+                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
+                    !!.toInt()).toString()
+
+                entries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        histories[i].cases!!.toFloat()
+                    )
+                )
+                deathEntries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        histories[i].deaths!!.toFloat()
+                    )
+                )
+            }
+
+
         }
 
         viewModel.iranLiveData.observe(viewLifecycleOwner) {
@@ -77,7 +113,7 @@ class IranFragment : CovidAppFragment() {
             else
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
-            getHistory()
+
 
             viewModel.iranYesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
@@ -115,12 +151,10 @@ class IranFragment : CovidAppFragment() {
         val barData = BarData(barDataSet)
         barData.barWidth = 0.25f
         barData.setValueTextColor(Color.WHITE)
-        barData.setValueTextSize(10f)
+
         barChart.animateY(500)
         barChart.rotation = 360f
         barChart.destroyDrawingCache()
-        barChart.setBorderColor(Color.WHITE)
-        barChart.setBackgroundColor(Color.TRANSPARENT)
         barChart.setBackgroundResource(R.drawable.bg_chart)
         barChart.data = barData
         val xAxis = barChart.xAxis
@@ -137,62 +171,9 @@ class IranFragment : CovidAppFragment() {
         barChart.setDrawGridBackground(false)
         barChart.legend.isEnabled = false
         barChart.description.isEnabled = false
-        barChart.setTouchEnabled(true)
         barChart.isDragEnabled = false
         barChart.setScaleEnabled(false)
         barChart.setPinchZoom(false)
         barChart.isAutoScaleMinMaxEnabled = true
 
-    }
-
-    private fun getHistory() {
-
-        val stringRequest = StringRequest(Request.Method.GET, urlIranHistory, { response ->
-            try {
-                val jsonObject = JSONObject(response)
-                val jsonDate = jsonObject.getJSONObject("timeline")
-                val jsonCases = jsonDate.getJSONObject("cases")
-                val jsonRecovered = jsonDate.getJSONObject("recovered")
-                val jsonDeaths = jsonDate.getJSONObject("deaths")
-
-                for (i in 0..daysAgo.toInt()-2) {
-                    val history = History()
-                    val date: String? = setHistoriesDate(i + 1)
-                    history.cases = jsonCases.getString(date)
-                    history.recovered = jsonRecovered.getString(date)
-                    history.deaths = jsonDeaths.getString(date)
-                    history.date = date
-                    histories.add(history)
-                }
-            } catch (e: JSONException) {
-                e.printStackTrace()
-            }
-            for (i in 0 until histories.size - 1) {
-
-                histories[i].cases =
-                    (histories[i].cases!!.toInt() - histories[i + 1].cases
-                    !!.toInt()).toString()
-
-                histories[i].deaths =
-                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
-                    !!.toInt()).toString()
-
-                entries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].cases!!.toFloat()
-                    )
-                )
-                deathEntries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].deaths!!.toFloat()
-                    )
-                )
-            }
-
-        }) { error -> Timber.e(error.message) }
-        requestQueue.add(stringRequest)
-    }
-
-}
+    }}

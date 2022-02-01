@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
 import com.example.covid_19statistics.databinding.ActivityMainBinding
+import com.example.covid_19statistics.feature.countries.CountriesFragment
+import com.example.covid_19statistics.feature.global.GlobalFragment
+import com.example.covid_19statistics.feature.iran.IranFragment
 
 
 class MainActivity : CovidAppActivity() {
@@ -24,19 +28,19 @@ class MainActivity : CovidAppActivity() {
         val navController = findNavController(R.id.fragment)
         binding.bottomNavigationView.setupWithNavController(navController)
 
-        binding.bottomNavigationView.setOnNavigationItemReselectedListener {
+        binding.bottomNavigationView.setOnItemReselectedListener {
         }
     }
 
     override fun onBackPressed() {
-        if (doubleBackToExitPressedOnce){
-        super.onBackPressed()
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed()
             return
         }
 
         doubleBackToExitPressedOnce = true
-        Toast.makeText(this,"برای خروج 2 بار برگشت بزنید",Toast.LENGTH_SHORT).show()
-        Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false },2000)
+        Toast.makeText(this, "برای خروج 2 بار برگشت بزنید", Toast.LENGTH_SHORT).show()
+        Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
 
     }
 

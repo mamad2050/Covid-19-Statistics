@@ -6,23 +6,36 @@ import com.example.covid_19statistics.common.CovidAppViewModel
 import com.example.covid_19statistics.common.asyncNetworkRequest
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.global.GlobalRepository
+import com.google.gson.JsonObject
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class GlobalViewModel(
     private val globalRepository: GlobalRepository
 ) : CovidAppViewModel() {
-     var globalLiveData = MutableLiveData<Global>()
-     var globalYesterdayLiveData = MutableLiveData<Global>()
+
+    var globalHistoryLiveData = MutableLiveData<JsonObject>()
+    var globalLiveData = MutableLiveData<Global>()
+    var globalYesterdayLiveData = MutableLiveData<Global>()
 
     init {
         progressBarLiveData.value = true
+
+
+        globalRepository.getGlobalHistory()
+            .asyncNetworkRequest()
+            .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable){
+                override fun onSuccess(t: JsonObject) {
+                    globalHistoryLiveData.value = t
+                }
+            })
+
 
         globalRepository.getGlobal()
             .doOnSuccess {
                 globalRepository.getGlobalYesterday()
                     .asyncNetworkRequest()
-                    .subscribe(object : CovidAppSingleObserver<Global>(compositeDisposable){
+                    .subscribe(object : CovidAppSingleObserver<Global>(compositeDisposable) {
                         override fun onSuccess(t: Global) {
                             globalYesterdayLiveData.value = t
                         }
