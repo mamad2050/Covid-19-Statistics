@@ -53,7 +53,7 @@ class IranFragment : CovidAppFragment() {
                 val jsonCases = jsonDate.getJSONObject("cases")
                 val jsonDeaths = jsonDate.getJSONObject("deaths")
 
-            for (i in 0..daysAgo.toInt() - 2) {
+            for (i in 0 until daysAgo.toInt()) {
                 val history = History()
                 val date: String? = setHistoriesDate(i + 1)
                 history.cases = jsonCases.getString(date)
