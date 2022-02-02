@@ -8,50 +8,50 @@ import com.example.covid_19statistics.common.asyncNetworkRequest
 import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.iran.IranRepository
 import com.google.gson.JsonObject
-import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.SingleSource
+import io.reactivex.disposables.Disposable
+import io.reactivex.functions.Function
 import io.reactivex.schedulers.Schedulers
+
 
 @SuppressLint("CheckResult")
 class IranViewModel(
-    private val iranRepository: IranRepository
+    private val repository: IranRepository
 ) : CovidAppViewModel() {
 
     val iranLiveData = MutableLiveData<Country>()
-
     val yesterdayLiveData = MutableLiveData<Country>()
-
     val historyLiveData = MutableLiveData<JsonObject>()
 
     init {
 
         progressBarLiveData.value = true
 
-
-        iranRepository.getHistory("ir")
+        repository.getIran()
             .asyncNetworkRequest()
-            .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable){
-                override fun onSuccess(t: JsonObject) {
-                    historyLiveData.value = t
+            .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
+                override fun onSuccess(t: Country) {
+                    iranLiveData.value = t
+                }
+            })
+
+        repository.getYesterday()
+            .asyncNetworkRequest()
+            .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
+                override fun onSuccess(t: Country) {
+                    yesterdayLiveData.value = t
                 }
             })
 
 
-        iranRepository.getIran()
-            .doOnSuccess {
-                iranRepository.getYesterday()
-                    .asyncNetworkRequest()
-                    .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
-                        override fun onSuccess(t: Country) {
-                            yesterdayLiveData.value = t
-                        }
-                    })
+        repository.getHistory("ir")
+            .asyncNetworkRequest()
+            .doAfterSuccess {
+                progressBarLiveData.postValue(false)
             }
-            .subscribeOn(Schedulers.io())
-            .doAfterSuccess{ progressBarLiveData.postValue(false) }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
-                override fun onSuccess(t: Country) {
-                    iranLiveData.value = t
+            .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable) {
+                override fun onSuccess(t: JsonObject) {
+                    historyLiveData.value = t
                 }
             })
 

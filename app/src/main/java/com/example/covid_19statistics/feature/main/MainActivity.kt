@@ -34,8 +34,8 @@ class MainActivity : CovidAppActivity() {
 
     override fun onBackPressed() {
         if (doubleBackToExitPressedOnce) {
-            super.onBackPressed()
-            return
+
+            finish()
         }
 
         doubleBackToExitPressedOnce = true

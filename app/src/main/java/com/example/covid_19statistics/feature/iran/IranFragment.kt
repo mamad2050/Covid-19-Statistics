@@ -114,7 +114,6 @@ class IranFragment : CovidAppFragment() {
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
 
-
             viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
                 if (histories[0].cases != yesterday.todayCases.toString()) {
