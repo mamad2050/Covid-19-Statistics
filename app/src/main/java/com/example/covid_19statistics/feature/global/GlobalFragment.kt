@@ -5,9 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.android.volley.Request
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.StringRequest
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
@@ -18,10 +15,8 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
-import org.json.JSONException
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 
 class GlobalFragment : CovidAppFragment() {
@@ -48,7 +43,7 @@ class GlobalFragment : CovidAppFragment() {
             setProgressIndicator(it)
         }
 
-        viewModel.globalHistoryLiveData.observe(viewLifecycleOwner){
+        viewModel.historyLiveData.observe(viewLifecycleOwner){
 
             val jsonObject = JSONObject(it.toString())
             val jsonCases = jsonObject.getJSONObject("cases")
@@ -115,7 +110,7 @@ class GlobalFragment : CovidAppFragment() {
             else
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
-            viewModel.globalYesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
+            viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
                 if (histories[0].cases != yesterday.todayCases.toString()) {
                     entries.add(BarEntry(11f, yesterday.todayCases!!.toFloat()))

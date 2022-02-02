@@ -2,17 +2,18 @@ package com.example.covid_19statistics.data.iran
 
 import com.example.covid_19statistics.data.Country
 import com.google.gson.JsonObject
+import io.reactivex.Observable
 import io.reactivex.Single
 
 class IranRepositoryImpl(private val iranRemoteDataSource: IranDataSource) :
     IranRepository {
 
-    override fun getIran(): Single<Country> = iranRemoteDataSource.getIran()
+    override fun getIran(): Observable<Country> = iranRemoteDataSource.getIran()
 
-    override fun getYesterday(): Single<Country> =
+    override fun getYesterday(): Observable<Country> =
         iranRemoteDataSource.getYesterday()
 
-    override fun getHistory(location: String): Single<JsonObject> =
+    override fun getHistory(location: String): Observable<JsonObject> =
         iranRemoteDataSource.getHistory(location)
 
 

@@ -7,47 +7,53 @@ import com.example.covid_19statistics.common.asyncNetworkRequest
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.global.GlobalRepository
 import com.google.gson.JsonObject
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 
 class GlobalViewModel(
     private val globalRepository: GlobalRepository
 ) : CovidAppViewModel() {
 
-    var globalHistoryLiveData = MutableLiveData<JsonObject>()
+    var historyLiveData = MutableLiveData<JsonObject>()
     var globalLiveData = MutableLiveData<Global>()
-    var globalYesterdayLiveData = MutableLiveData<Global>()
+    var yesterdayLiveData = MutableLiveData<Global>()
 
     init {
         progressBarLiveData.value = true
 
-        globalRepository.getHistory("all")
-            .asyncNetworkRequest()
-            .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable){
-                override fun onSuccess(t: JsonObject) {
-                    globalHistoryLiveData.value = t
-                }
-            })
-
-
         globalRepository.getGlobal()
-            .doOnSuccess {
-                globalRepository.getYesterdayStatistic()
-                    .asyncNetworkRequest()
-                    .subscribe(object : CovidAppSingleObserver<Global>(compositeDisposable) {
-                        override fun onSuccess(t: Global) {
-                            globalYesterdayLiveData.value = t
-                        }
-
-                    })
-            }
-            .doAfterSuccess { progressBarLiveData.postValue(false) }
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .asyncNetworkRequest()
             .subscribe(object : CovidAppSingleObserver<Global>(compositeDisposable) {
-                override fun onSuccess(t: Global) {
+                override fun onNext(t: Global) {
                     globalLiveData.value = t
                 }
+                override fun onComplete() {
+
+                    /* get history statistic */
+                    globalRepository.getHistory("all")
+                        .asyncNetworkRequest()
+                        .subscribe(object :
+                            CovidAppSingleObserver<JsonObject>(compositeDisposable) {
+                            override fun onNext(t: JsonObject) {
+                                historyLiveData.value = t
+                            }
+                            override fun onComplete() {
+
+                                /* get yesterday statistic */
+                                globalRepository.getYesterdayStatistic()
+                                    .asyncNetworkRequest()
+                                    .subscribe(object :
+                                        CovidAppSingleObserver<Global>(compositeDisposable) {
+                                        override fun onNext(t: Global) {
+                                            yesterdayLiveData.value = t
+                                        }
+                                        override fun onComplete() {
+                                            progressBarLiveData.postValue(false)
+                                        }
+                                    })
+                            }
+                        })
+                }
+
             })
+
     }
 }

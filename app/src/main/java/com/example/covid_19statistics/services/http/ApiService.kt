@@ -5,6 +5,7 @@ import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.History
 import com.google.gson.JsonObject
+import io.reactivex.Observable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.ResponseBody
@@ -21,22 +22,22 @@ import retrofit2.http.Path
 interface ApiService {
 
     @GET("countries?allowNull=1")
-    fun getCountries(): Single<List<Country>>
+    fun getCountries(): Observable<List<Country>>
 
     @GET("countries/ir?allowNull=1")
-    fun getIran(): Single<Country>
-
-    @GET("countries/iran?yesterday=1&allowNull=1")
-    fun getYesterday(): Single<Country>
-
-    @GET("all?yesterday=1&allowNull=1")
-    fun getGlobalYesterday(): Single<Global>
+    fun getIran(): Observable<Country>
 
     @GET("all")
-    fun getGlobal(): Single<Global>
+    fun getGlobal(): Observable<Global>
+
+    @GET("countries/iran?yesterday=1&allowNull=1")
+    fun getIranYesterday(): Observable<Country>
+
+    @GET("all?yesterday=1&allowNull=1")
+    fun getGlobalYesterday(): Observable<Global>
 
     @GET("historical/{location}?lastdays=$daysAgo")
-    fun getHistory(@Path("location") location: String): Single<JsonObject>
+    fun getHistory(@Path("location") location: String): Observable<JsonObject>
 
 }
 

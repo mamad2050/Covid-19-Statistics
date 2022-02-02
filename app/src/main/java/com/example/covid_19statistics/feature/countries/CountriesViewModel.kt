@@ -20,12 +20,16 @@ class CountriesViewModel(
 
         countryRepository.getCountries()
             .subscribeOn(Schedulers.io())
-            .doOnSuccess { progressBarLiveData.postValue(false)  }
+            .doFinally { progressBarLiveData.postValue(false)  }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : CovidAppSingleObserver<List<Country>>(compositeDisposable) {
-                override fun onSuccess(t: List<Country>) {
+                override fun onNext(t: List<Country>) {
                     countriesLiveData.value = t
                 }
+
+                override fun onComplete() {
+                }
+
             })
     }
 }

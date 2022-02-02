@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -73,7 +74,7 @@ fun valueAnimator(num: String, tv: TextView) {
     valueAnimator.start()
 }
 
-fun <T> Single<T>.asyncNetworkRequest(): Single<T> {
+fun <T> Observable<T>.asyncNetworkRequest(): Observable<T> {
     return subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
 
