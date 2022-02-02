@@ -1,24 +1,24 @@
 package com.example.covid_19statistics.feature.main
 
+import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
 import com.example.covid_19statistics.databinding.ActivityMainBinding
-import com.example.covid_19statistics.feature.countries.CountriesFragment
-import com.example.covid_19statistics.feature.global.GlobalFragment
-import com.example.covid_19statistics.feature.iran.IranFragment
 
 
 class MainActivity : CovidAppActivity() {
 
     private var doubleBackToExitPressedOnce = false
     private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,5 +43,7 @@ class MainActivity : CovidAppActivity() {
         Handler(Looper.getMainLooper()).postDelayed({ doubleBackToExitPressedOnce = false }, 2000)
 
     }
+
+
 
 }
