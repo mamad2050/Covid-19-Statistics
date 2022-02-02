@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/drawable/bg_et_search.xml" value="0.139" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/drawable/ic_iran.xml" value="0.1415" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/drawable/ic_language.xml" value="0.1415" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/drawable/ic_placeholder.xml" value="0.1415" />
@@ -12,7 +13,8 @@
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/layout/fragment_countries.xml" value="0.3333333333333333" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/layout/fragment_global.xml" value="0.22" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/layout/fragment_iran.xml" value="0.16666666666666666" />
-        <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/layout/item_countries.xml" value="0.17552083333333332" />
+        <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/layout/item_countries.xml" value="0.22" />
+        <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/layout/view_connection_lost.xml" value="0.17552083333333332" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid-19-Statistics/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid19Statistics/app/src/main/res/drawable-v24/bg_chart.xml" value="0.19166666666666668" />
         <entry key="..\:/Programming/Android/Projects/Apps/Covid19Statistics/app/src/main/res/drawable/bg_chart.xml" value="0.19166666666666668" />

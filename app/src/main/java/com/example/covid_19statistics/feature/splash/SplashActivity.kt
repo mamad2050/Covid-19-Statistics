@@ -16,7 +16,7 @@ import com.example.covid_19statistics.databinding.ActivitySplashBinding
 import com.example.covid_19statistics.feature.main.MainActivity
 
 
-class SplashActivity : CovidAppActivity(), SwipeRefreshLayout.OnRefreshListener {
+class SplashActivity : CovidAppActivity(){
 
     private lateinit var binding: ActivitySplashBinding
 
@@ -29,7 +29,9 @@ class SplashActivity : CovidAppActivity(), SwipeRefreshLayout.OnRefreshListener 
 
         checkNetworkCondition()
 
-        binding.swipeRefreshLayout.setOnRefreshListener(this)
+        binding.btnRetry.setOnClickListener {
+        checkNetworkCondition()
+        }
 
     }
 
@@ -51,7 +53,6 @@ class SplashActivity : CovidAppActivity(), SwipeRefreshLayout.OnRefreshListener 
     }
 
     private fun goToHomeActivity() {
-        binding.pbSplash.visibility = View.VISIBLE
 
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
@@ -62,7 +63,12 @@ class SplashActivity : CovidAppActivity(), SwipeRefreshLayout.OnRefreshListener 
 
     private fun checkNetworkCondition() {
         if (checkNetworkConnection()) {
-            binding.swipeRefreshLayout.isEnabled = false
+            binding.lottieContainer.visibility = View.VISIBLE
+            binding.spinkit.visibility = View.VISIBLE
+
+            binding.btnRetry.visibility = View.GONE
+            binding.ivConnectionLost.visibility = View.GONE
+            binding.tvConnectionLost.visibility = View.GONE
             goToHomeActivity()
         } else {
             noNetwork()
@@ -71,15 +77,17 @@ class SplashActivity : CovidAppActivity(), SwipeRefreshLayout.OnRefreshListener 
 
     private fun noNetwork() {
 
-        Toast.makeText(this, "اینترنت وصل نیست :)", Toast.LENGTH_SHORT).show()
+        binding.lottieContainer.visibility = View.GONE
+        binding.spinkit.visibility = View.GONE
+        binding.btnRetry.visibility = View.VISIBLE
+        binding.ivConnectionLost.visibility = View.VISIBLE
+        binding.tvConnectionLost.visibility = View.VISIBLE
+
     }
 
-    override fun onRefresh() {
-        Toast.makeText(this, "در حال انتقال به حالت آنلاین", Toast.LENGTH_SHORT).show()
-        checkNetworkCondition()
-    }
 
-    private fun hideStatusBar(){
+
+    private fun hideStatusBar() {
         val decorView = window.decorView
         val uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN
         decorView.systemUiVisibility = uiOptions

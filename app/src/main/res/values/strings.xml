@@ -15,5 +15,7 @@
     <string name="all_cases">کل مبتلایان</string>
     <string name="all_recovered">کل بهبود یافتگان</string>
     <string name="all_deaths">کل فوت شدگان</string>
+    <string name="retry">تلاش مجدد</string>
+    <string name="no_connect">اتصال برقرار نیست!</string>
 
 </resources>

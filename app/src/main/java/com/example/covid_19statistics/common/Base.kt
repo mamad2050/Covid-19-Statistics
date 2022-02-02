@@ -62,6 +62,8 @@ interface CovidAppView {
         }
     }
 
+
+
 }
 
 
