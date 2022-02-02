@@ -2,15 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item android:id="@+id/globalFragment"
-        android:menuCategory="secondary"
+        android:enabled="true"
+        android:icon="@drawable/ic_worldmap"
         android:title="@string/global" />
 
     <item android:id="@+id/iranFragment"
-        android:menuCategory="secondary"
+        android:icon="@drawable/ic_iran"
+        android:enabled="true"
         android:title="@string/iran" />
 
     <item android:id="@+id/countriesFragment"
-        android:menuCategory="secondary"
+        android:enabled="true"
+
+        android:icon="@drawable/ic_countries"
         android:title="@string/countries" />
 
 </menu>
