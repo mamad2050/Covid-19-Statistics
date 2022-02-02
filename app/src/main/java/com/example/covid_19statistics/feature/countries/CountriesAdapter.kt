@@ -55,31 +55,32 @@ class CountriesAdapter(
 
         fun bindCountry(country: Country) {
 
-            tvCountryName.text = country.name;
+            tvCountryName.text = country.name
+
             Glide.with(itemView.context).load(country.countryInfo.flag).into(ivCountry)
 
 
             if (country.todayCases != null)
-                valueAnimator(country.todayCases.toString(),tvCountryCases)
+                valueAnimator(country.todayCases.toString(), tvCountryCases)
             else
                 tvCountryCases.text = itemView.context.getString(R.string.not_declare)
 
 
             if (country.todayRecovered != null)
-                valueAnimator(country.todayRecovered.toString(),tvCountryRecovered)
+                valueAnimator(country.todayRecovered.toString(), tvCountryRecovered)
             else
                 tvCountryRecovered.text = itemView.context.getString(R.string.not_declare)
 
 
             if (country.todayDeaths != null)
-            valueAnimator(country.todayDeaths.toString(),tvCountryDeaths)
+                valueAnimator(country.todayDeaths.toString(), tvCountryDeaths)
             else
                 tvCountryDeaths.text = itemView.context.getString(R.string.not_declare)
 
 
-            valueAnimator(country.cases.toString(),tvCountryAllCases)
-            valueAnimator(country.recovered.toString(),tvCountryAllRecovered)
-            valueAnimator(country.deaths.toString(),tvCountryAllDeaths)
+            valueAnimator(country.cases.toString(), tvCountryAllCases)
+            valueAnimator(country.recovered.toString(), tvCountryAllRecovered)
+            valueAnimator(country.deaths.toString(), tvCountryAllDeaths)
 
             itemView.implementSpringAnimationTrait()
 

@@ -56,7 +56,15 @@ class CountriesFragment : CovidAppFragment() {
         }
 
         countriesViewModel.countriesLiveData.observe(viewLifecycleOwner) {
-            countriesAdapter = CountriesAdapter(it as MutableList<Country>)
+
+            val result = it
+
+            for (i in Country.getCountries().indices) {
+                if (Country.getCountries()[i] != ""){
+                    result[i].name = Country.getCountries()[i]
+                }
+            }
+            countriesAdapter = CountriesAdapter(result as MutableList<Country>)
             binding.rvCountriesFragment.adapter = countriesAdapter
         }
 

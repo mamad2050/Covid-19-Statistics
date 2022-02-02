@@ -6,5 +6,6 @@ import io.reactivex.Single
 
 class CountryRepositoryImpl(private val countryRemoteDataSource: CountryDataSource) :
     CountryRepository {
-    override fun getCountries(): Observable<List<Country>> = countryRemoteDataSource.getCountries()
+    override fun getCountries(): Observable<List<Country>> =
+        countryRemoteDataSource.getCountries()
 }
