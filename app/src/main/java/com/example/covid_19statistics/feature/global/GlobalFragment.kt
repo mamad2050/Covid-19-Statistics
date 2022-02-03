@@ -120,16 +120,16 @@ class GlobalFragment : CovidAppFragment() {
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
 
-            entries.add(BarEntry(16f, it.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(16f, it.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat()+2, it.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat()+2, it.todayDeaths!!.toFloat()))
 
 
         }
 
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
-            entries.add(BarEntry(15f, yesterday.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(15f, yesterday.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat()+1, yesterday.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat()+1, yesterday.todayDeaths!!.toFloat()))
 
 
             initialBarChart(binding.barchartCases, entries, Color.YELLOW)

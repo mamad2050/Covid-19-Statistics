@@ -52,7 +52,7 @@ class IranFragment : CovidAppFragment() {
             val jsonCases = jsonTimeLine.getJSONObject("cases")
             val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
 
-            for (i in 0 until daysAgo.toInt() - 1) {
+            for (i in 0 until daysAgo - 1) {
                 val history = History()
                 val date: String? = setHistoriesDate(i + 2)
                 history.cases = jsonCases.getString(date)
@@ -113,8 +113,8 @@ class IranFragment : CovidAppFragment() {
 
 
             if (it.todayCases != null) {
-                entries.add(BarEntry(16f, it.todayCases.toFloat()))
-                deathEntries.add(BarEntry(16f, it.todayDeaths!!.toFloat()))
+                entries.add(BarEntry(daysAgo.toFloat()+2, it.todayCases.toFloat()))
+                deathEntries.add(BarEntry(daysAgo.toFloat()+2, it.todayDeaths!!.toFloat()))
             }
 
         }
@@ -122,8 +122,8 @@ class IranFragment : CovidAppFragment() {
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
 
 
-            entries.add(BarEntry(15f, it.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(15f, it.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat()+1, it.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat()+1, it.todayDeaths!!.toFloat()))
 
 
             initialBarChart(binding.barchartCases, entries, Color.YELLOW)
