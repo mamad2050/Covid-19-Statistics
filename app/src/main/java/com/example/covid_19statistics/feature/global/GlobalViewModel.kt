@@ -4,12 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import com.example.covid_19statistics.common.CovidAppSingleObserver
 import com.example.covid_19statistics.common.CovidAppViewModel
 import com.example.covid_19statistics.common.asyncNetworkRequest
+import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.global.GlobalRepository
 import com.google.gson.JsonObject
 
 class GlobalViewModel(
-    private val globalRepository: GlobalRepository
+    private val repository: GlobalRepository
 ) : CovidAppViewModel() {
 
     var historyLiveData = MutableLiveData<JsonObject>()
@@ -19,7 +20,7 @@ class GlobalViewModel(
     init {
         progressBarLiveData.value = true
 
-        globalRepository.getGlobal()
+        repository.getGlobal()
             .asyncNetworkRequest()
             .subscribe(object : CovidAppSingleObserver<Global>(compositeDisposable) {
                 override fun onNext(t: Global) {
@@ -28,7 +29,7 @@ class GlobalViewModel(
                 override fun onComplete() {
 
                     /* get history statistic */
-                    globalRepository.getHistory("all")
+                    repository.getHistory("all")
                         .asyncNetworkRequest()
                         .subscribe(object :
                             CovidAppSingleObserver<JsonObject>(compositeDisposable) {
@@ -38,7 +39,7 @@ class GlobalViewModel(
                             override fun onComplete() {
 
                                 /* get yesterday statistic */
-                                globalRepository.getYesterdayStatistic()
+                                repository.getYesterdayStatistic()
                                     .asyncNetworkRequest()
                                     .subscribe(object :
                                         CovidAppSingleObserver<Global>(compositeDisposable) {

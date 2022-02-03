@@ -1,10 +1,10 @@
 package com.example.covid_19statistics.data.global
 
+import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.services.http.ApiService
 import com.google.gson.JsonObject
 import io.reactivex.Observable
-import io.reactivex.Single
 
 class GlobalRemoteDataSource(private val apiService: ApiService) : GlobalDataSource {
 

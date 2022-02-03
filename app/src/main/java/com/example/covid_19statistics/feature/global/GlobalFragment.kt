@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
+import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
 import com.example.covid_19statistics.feature.InfoDialog
@@ -29,6 +31,10 @@ class GlobalFragment : CovidAppFragment() {
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
     private val infoDialog = InfoDialog()
+
+    private lateinit var todayStatistic : Global
+    private lateinit var yesterday : Global
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -83,14 +89,18 @@ class GlobalFragment : CovidAppFragment() {
                 )
             }
 
+
+            valueAnimator(todayStatistic.cases.toString(), binding.tvAllCases)
+            valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
+            valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
+
+
         }
 
 
         viewModel.globalLiveData.observe(viewLifecycleOwner) {
 
-            valueAnimator(it.cases.toString(), binding.tvAllCases)
-            valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
-            valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
+            todayStatistic = it
 
             binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 
@@ -144,7 +154,7 @@ class GlobalFragment : CovidAppFragment() {
 
         val barDataSet = BarDataSet(entries, "Statistics")
         barDataSet.setGradientColor(Color.WHITE, color)
-        barDataSet.valueTextSize = 11f
+        barDataSet.valueTextSize = 10f
         barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 

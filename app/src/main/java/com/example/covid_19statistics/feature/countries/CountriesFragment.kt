@@ -3,6 +3,7 @@ package com.example.covid_19statistics.feature.countries
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +12,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppFragment
 import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.CountryFa
 import com.example.covid_19statistics.databinding.FragmentCountriesBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import kotlin.math.log
 
 class CountriesFragment : CovidAppFragment() {
 
@@ -40,7 +43,7 @@ class CountriesFragment : CovidAppFragment() {
 
 
         binding.btnSort.setOnClickListener {
-            val dialog = MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
+            val dialog = MaterialAlertDialogBuilder(requireContext(), R.style.AlertDialogCustom)
                 .setSingleChoiceItems(
                     R.array.sortArray, defaultDialogIndex
                 ) { dialog, index ->
@@ -74,14 +77,19 @@ class CountriesFragment : CovidAppFragment() {
 
         countriesViewModel.countriesLiveData.observe(viewLifecycleOwner) {
 
+            val result = ArrayList<Country>()
 
-            for (i in Country.getCountries().indices) {
-                if (Country.getCountries()[i] != "") {
-                    it[i].name = Country.getCountries()[i]
+            it.forEach { country ->
+                CountryFa.getCountriesList().forEach { fa ->
+                    if (country.countryInfo.iso3 == fa.iso3) {
+                        country.name = fa.name
+                        result.add(country)
+                        CountryFa.getCountriesList().remove(fa)
+                    }
                 }
             }
 
-            countriesAdapter = CountriesAdapter(it as MutableList<Country>)
+            countriesAdapter = CountriesAdapter(result as MutableList<Country>)
             binding.rvCountriesFragment.adapter = countriesAdapter
         }
 
