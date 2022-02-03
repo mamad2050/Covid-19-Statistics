@@ -47,15 +47,14 @@ class IranFragment : CovidAppFragment() {
 
         viewModel.historyLiveData.observe(viewLifecycleOwner) {
 
+            val jsonObject = JSONObject(it.toString())
+            val jsonTimeLine = jsonObject.getJSONObject("timeline")
+            val jsonCases = jsonTimeLine.getJSONObject("cases")
+            val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
 
-                val jsonObject = JSONObject(it.toString())
-                val jsonDate = jsonObject.getJSONObject("timeline")
-                val jsonCases = jsonDate.getJSONObject("cases")
-                val jsonDeaths = jsonDate.getJSONObject("deaths")
-
-            for (i in 0 until daysAgo.toInt()) {
+            for (i in 0 until daysAgo.toInt() - 1) {
                 val history = History()
-                val date: String? = setHistoriesDate(i + 1)
+                val date: String? = setHistoriesDate(i + 2)
                 history.cases = jsonCases.getString(date)
                 history.deaths = jsonDeaths.getString(date)
                 history.date = date
@@ -95,7 +94,6 @@ class IranFragment : CovidAppFragment() {
             valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
             valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
 
-
             binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 
             if (it.todayCases != null)
@@ -114,28 +112,24 @@ class IranFragment : CovidAppFragment() {
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
 
-            viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
-
-                if (histories[0].cases != yesterday.todayCases.toString()) {
-                    entries.add(BarEntry(11f, yesterday.todayCases!!.toFloat()))
-                    deathEntries.add(BarEntry(11f, yesterday.todayDeaths!!.toFloat()))
-
-                    if (it.todayCases != null) {
-                        entries.add(BarEntry(12f, it.todayCases.toFloat()))
-                        deathEntries.add(BarEntry(12f, it.todayDeaths!!.toFloat()))
-                    }
-                } else {
-                    if (it.todayCases != null) {
-                        entries.add(BarEntry(11f, it.todayCases.toFloat()))
-                        deathEntries.add(BarEntry(11f, it.todayDeaths!!.toFloat()))
-                    }
-                }
-
-                initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-
-                initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
-
+            if (it.todayCases != null) {
+                entries.add(BarEntry(16f, it.todayCases.toFloat()))
+                deathEntries.add(BarEntry(16f, it.todayDeaths!!.toFloat()))
             }
+
+        }
+
+        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
+
+
+            entries.add(BarEntry(15f, it.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(15f, it.todayDeaths!!.toFloat()))
+
+
+            initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+
+            initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
         }
     }
 
@@ -162,7 +156,7 @@ class IranFragment : CovidAppFragment() {
         yAxis.isEnabled = false
         val yAxis2 = barChart.axisRight
         yAxis2.isEnabled = false
-        barDataSet.valueTextSize = 12f
+        barDataSet.valueTextSize = 11f
         barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 
@@ -175,4 +169,5 @@ class IranFragment : CovidAppFragment() {
         barChart.setPinchZoom(false)
         barChart.isAutoScaleMinMaxEnabled = true
 
-    }}
+    }
+}

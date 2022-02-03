@@ -320,9 +320,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="نمودار مبتلایان 10 روز گذشته"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:text="@string/daysAgoBarchart"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
 
                 <com.example.covid_19statistics.view.RoundedBarChart
@@ -343,9 +343,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:text="نمودار فوتی های 10 روز گذشته"
-                    android:textStyle="bold"
-                    android:textSize="14sp" />
+                    android:text="@string/daysAgoBarchart"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
 
                 <com.example.covid_19statistics.view.RoundedBarChart
                     android:id="@+id/barchart_deaths"

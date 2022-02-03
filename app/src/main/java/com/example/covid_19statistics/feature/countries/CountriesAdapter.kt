@@ -19,14 +19,19 @@ import kotlin.collections.ArrayList
 
 class CountriesAdapter(
     private var countries: MutableList<Country>,
-
-    ) : RecyclerView.Adapter<CountriesAdapter.MyHolder>(), Filterable {
+) : RecyclerView.Adapter<CountriesAdapter.MyHolder>(), Filterable {
 
 
     var filterCountryList = ArrayList<Country>()
 
     init {
         filterCountryList = countries as ArrayList<Country>
+
+        filterCountryList.apply {
+            sortBy { it.cases }
+            reverse()
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountriesAdapter.MyHolder {
@@ -120,6 +125,28 @@ class CountriesAdapter(
             }
 
         }
+    }
+
+    fun sortCountries(index: Int) {
+
+        when (index) {
+            0 -> filterCountryList.apply {
+                sortBy { it.todayCases }
+                reverse()
+            }
+            1 -> filterCountryList.sortBy { it.cases }
+
+
+            2 -> filterCountryList.apply {
+                sortBy { it.todayDeaths }
+                reverse()
+            }
+            3 -> filterCountryList.sortBy { it.todayDeaths }
+        }
+
+        notifyDataSetChanged()
+
+
     }
 
 }

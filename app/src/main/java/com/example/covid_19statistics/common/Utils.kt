@@ -9,7 +9,6 @@ import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.SpringAnimation
 import androidx.dynamicanimation.animation.SpringForce
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import saman.zamani.persiandate.PersianDate
@@ -17,6 +16,8 @@ import saman.zamani.persiandate.PersianDateFormat
 import timber.log.Timber
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
 
 
@@ -78,15 +79,16 @@ fun <T> Observable<T>.asyncNetworkRequest(): Observable<T> {
     return subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 }
 
-
 fun setHistoriesDate(i: Int): String? {
+
     val now = Date()
     val calendar = Calendar.getInstance()
     calendar.time = now
-    calendar.add(Calendar.DAY_OF_MONTH, -i - 1)
+    calendar.add(Calendar.DAY_OF_MONTH, -i )
     val date = calendar.time
     val simpleDateFormat = SimpleDateFormat("M/d/yy")
     return simpleDateFormat.format(date)
+
 }
 
 
@@ -97,6 +99,6 @@ fun convertMsToDate(dateMs: Long): String {
 
     val pTimeFormatter = PersianDateFormat("H:m:s")
 
-    return pDateFormatter.format( persianDate) + " ساعت " + pTimeFormatter.format(persianDate);
+    return pDateFormatter.format(persianDate) + " ساعت " + pTimeFormatter.format(persianDate);
 }
 

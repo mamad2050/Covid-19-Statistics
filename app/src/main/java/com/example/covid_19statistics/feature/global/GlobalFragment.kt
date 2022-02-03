@@ -23,7 +23,7 @@ class GlobalFragment : CovidAppFragment() {
 
     private var _binding: FragmentGlobalBinding? = null
     private val binding get() = _binding!!
-    private val viewModel : GlobalViewModel by viewModel()
+    private val viewModel: GlobalViewModel by viewModel()
     private var histories = ArrayList<History>()
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
@@ -32,7 +32,7 @@ class GlobalFragment : CovidAppFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentGlobalBinding.inflate(inflater,container,false)
+        _binding = FragmentGlobalBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -43,12 +43,12 @@ class GlobalFragment : CovidAppFragment() {
             setProgressIndicator(it)
         }
 
-        viewModel.historyLiveData.observe(viewLifecycleOwner){
+        viewModel.historyLiveData.observe(viewLifecycleOwner) {
 
             val jsonObject = JSONObject(it.toString())
             val jsonCases = jsonObject.getJSONObject("cases")
             val jsonDeaths = jsonObject.getJSONObject("deaths")
-                //
+            //
             for (i in 0..daysAgo.toInt() - 2) {
                 val history = History()
                 val date: String? = setHistoriesDate(i + 1)
@@ -82,8 +82,6 @@ class GlobalFragment : CovidAppFragment() {
                 )
             }
 
-
-
         }
 
 
@@ -110,29 +108,25 @@ class GlobalFragment : CovidAppFragment() {
             else
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
-            viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
-                if (histories[0].cases != yesterday.todayCases.toString()) {
-                    entries.add(BarEntry(11f, yesterday.todayCases!!.toFloat()))
-                    deathEntries.add(BarEntry(11f, yesterday.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(16f, it.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(16f, it.todayDeaths!!.toFloat()))
 
-                    if (it.todayCases != null) {
-                        entries.add(BarEntry(12f, it.todayCases.toFloat()))
-                        deathEntries.add(BarEntry(12f, it.todayDeaths!!.toFloat()))
-                    }
-                } else {
-                    if (it.todayCases != null) {
-                        entries.add(BarEntry(11f, it.todayCases.toFloat()))
-                        deathEntries.add(BarEntry(11f, it.todayDeaths!!.toFloat()))
-                    }
-                }
 
-                initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-
-                initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
-
-            }
         }
+
+        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
+
+            entries.add(BarEntry(15f, yesterday.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(15f, yesterday.todayDeaths!!.toFloat()))
+
+
+            initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+
+            initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
+        }
+
     }
 
     override fun onDestroy() {
@@ -148,8 +142,8 @@ class GlobalFragment : CovidAppFragment() {
         barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 
-        if (color == Color.YELLOW){
-        barDataSet.valueFormatter = LargeValueFormatter()
+        if (color == Color.YELLOW) {
+            barDataSet.valueFormatter = LargeValueFormatter()
         }
 
         val barData = BarData(barDataSet)

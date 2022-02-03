@@ -1,6 +1,6 @@
 package com.example.covid_19statistics.common
 
-const val daysAgo: String = "10"
+const val daysAgo: String = "14"
 
 const val urlIranHistory =
     "https://disease.sh/v3/covid-19/historical/iran?lastdays=$daysAgo"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <array name="sortArray">
+        <item>بیشترین مبتلایان امروز</item>
+        <item>کمترین مبتلایان امروز</item>
+        <item>بیشترین فوت شدگان امروز</item>
+        <item>کمترین فوت شدگان امروز</item>
+        <item>بیشترین  مبتلایان</item>
+        <item>کمترین مبتلایان</item>
+        <item>بیشترین  فوت شدگان</item>
+        <item>کمترین فوت شدگان</item>
+    </array>
+</resources>

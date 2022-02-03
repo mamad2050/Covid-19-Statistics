@@ -8,9 +8,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppFragment
 import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.databinding.FragmentCountriesBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountriesFragment : CovidAppFragment() {
@@ -19,6 +21,7 @@ class CountriesFragment : CovidAppFragment() {
     private val binding get() = _binding!!
     private val countriesViewModel: CountriesViewModel by viewModel()
     private lateinit var countriesAdapter: CountriesAdapter
+    var defaultDialogIndex = 0
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -34,6 +37,20 @@ class CountriesFragment : CovidAppFragment() {
 
 
         binding.rvCountriesFragment.layoutManager = LinearLayoutManager(context)
+
+
+        binding.btnSort.setOnClickListener {
+            val dialog = MaterialAlertDialogBuilder(requireContext(),R.style.AlertDialogCustom)
+                .setSingleChoiceItems(
+                    R.array.sortArray, defaultDialogIndex
+                ) { dialog, index ->
+                    defaultDialogIndex = index
+                    countriesAdapter.sortCountries(index)
+                    dialog.dismiss()
+                }.setTitle(getString(R.string.sortTitle))
+
+            dialog.show()
+        }
 
 
         binding.etSearch.addTextChangedListener(object : TextWatcher {
@@ -57,14 +74,14 @@ class CountriesFragment : CovidAppFragment() {
 
         countriesViewModel.countriesLiveData.observe(viewLifecycleOwner) {
 
-            val result = it
 
             for (i in Country.getCountries().indices) {
-                if (Country.getCountries()[i] != ""){
-                    result[i].name = Country.getCountries()[i]
+                if (Country.getCountries()[i] != "") {
+                    it[i].name = Country.getCountries()[i]
                 }
             }
-            countriesAdapter = CountriesAdapter(result as MutableList<Country>)
+
+            countriesAdapter = CountriesAdapter(it as MutableList<Country>)
             binding.rvCountriesFragment.adapter = countriesAdapter
         }
 
