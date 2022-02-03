@@ -2,6 +2,8 @@ package com.example.covid_19statistics.common
 
 const val daysAgo: String = "14"
 
+const val TELEGRAM_PAGE_ID = "mtnzn"
+
 const val urlIranHistory =
     "https://disease.sh/v3/covid-19/historical/iran?lastdays=$daysAgo"
 

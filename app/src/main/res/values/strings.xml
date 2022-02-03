@@ -18,6 +18,7 @@
     <string name="retry">تلاش مجدد</string>
     <string name="no_connect">اتصال برقرار نیست!</string>
     <string name="sortTitle">مرتب سازی براساس :</string>
-    <string name="daysAgoBarchart">نمودار مبتلایان 14 روز گذشته</string>
+    <string name="cases_barchart_title">نمودار مبتلایان 14 روز گذشته</string>
+    <string name="deaths_barchart_title">نمودار فوتی های 14 روز گذشته</string>
 
 </resources>

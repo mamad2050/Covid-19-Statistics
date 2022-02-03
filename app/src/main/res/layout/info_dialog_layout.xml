@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+
+    android:layout_height="wrap_content"
+    android:layoutDirection="rtl">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?colorPrimary"
+        android:padding="16dp">
+
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_baseline_close_24" />
+
+        <ImageView
+            android:id="@+id/img_dialog"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/txt_version"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_dialog"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="24dp"
+            android:text="نسخه 1.0"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/txt_resource"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_version"
+            android:layout_centerHorizontal="true"
+            android:text="منبع : disease.sh "
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/txt_programmer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_resource"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:text="برنامه نویس : محمد زاهدی نژاد"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_telegram"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_below="@id/txt_programmer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="24dp"
+            android:src="@drawable/ic_tel" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_vote"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/navy_blue"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/iv_telegram"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="  ثبت نظر " />
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

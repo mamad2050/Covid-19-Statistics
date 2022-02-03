@@ -28,7 +28,7 @@ class CountriesAdapter(
         filterCountryList = countries as ArrayList<Country>
 
         filterCountryList.apply {
-            sortBy { it.cases }
+            sortBy { it.todayCases }
             reverse()
         }
 
@@ -134,7 +134,7 @@ class CountriesAdapter(
                 sortBy { it.todayCases }
                 reverse()
             }
-            1 -> filterCountryList.sortBy { it.cases }
+            1 -> filterCountryList.sortBy { it.todayCases }
 
 
             2 -> filterCountryList.apply {
@@ -142,6 +142,20 @@ class CountriesAdapter(
                 reverse()
             }
             3 -> filterCountryList.sortBy { it.todayDeaths }
+
+
+            4 -> filterCountryList.apply {
+                sortBy { it.cases }
+                reverse()
+            }
+            5 -> filterCountryList.sortBy { it.cases }
+
+
+            6 -> filterCountryList.apply {
+                sortBy { it.deaths }
+                reverse()
+            }
+            7 -> filterCountryList.sortBy { it.deaths }
         }
 
         notifyDataSetChanged()

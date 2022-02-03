@@ -9,6 +9,7 @@ import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
+import com.example.covid_19statistics.feature.InfoDialog
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -27,7 +28,7 @@ class GlobalFragment : CovidAppFragment() {
     private var histories = ArrayList<History>()
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
-
+    private val infoDialog = InfoDialog()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -125,6 +126,11 @@ class GlobalFragment : CovidAppFragment() {
 
             initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
 
+        }
+
+        binding.btnInfo.setOnClickListener {
+
+            activity?.let { view -> infoDialog.show(view.supportFragmentManager, null) }
         }
 
     }
