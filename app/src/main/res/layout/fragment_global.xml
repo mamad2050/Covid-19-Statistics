@@ -345,12 +345,13 @@
 
             <com.example.covid_19statistics.view.RoundedBarChart
                 android:id="@+id/barchart_cases"
-                app:radius="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_below="@id/tv5"
                 android:layout_marginHorizontal="8dp"
-                android:background="@drawable/bg_chart" />
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/bg_chart"
+                app:radius="8dp" />
 
 
             <TextView
