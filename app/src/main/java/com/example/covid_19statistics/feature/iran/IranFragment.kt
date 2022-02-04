@@ -14,6 +14,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
+import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.collections.ArrayList
@@ -149,6 +150,7 @@ class IranFragment : CovidAppFragment() {
         val barData = BarData(barDataSet)
         barData.barWidth = 0.25f
         barData.setValueTextColor(Color.WHITE)
+        barDataSet.valueFormatter = LargeValueFormatter()
 
         barChart.animateY(500)
         barChart.rotation = 360f
@@ -163,7 +165,7 @@ class IranFragment : CovidAppFragment() {
         yAxis2.isEnabled = false
         barDataSet.valueTextSize = 10f
         barDataSet.valueTypeface = binding.tvCountryName.typeface
-        barDataSet.valueFormatter = DefaultValueFormatter(0)
+
 
         barChart.setDrawBorders(false)
         barChart.setDrawGridBackground(false)

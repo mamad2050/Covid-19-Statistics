@@ -104,20 +104,11 @@ class GlobalFragment : CovidAppFragment() {
 
             binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 
-            if (it.todayCases != null)
-                valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
-            else
-                binding.tvTodayCases.text = context?.getString(R.string.not_declare)
+            valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
 
-            if (it.todayRecovered != null)
-                valueAnimator(it.todayRecovered.toString(), binding.tvTodayRecovered)
-            else
-                binding.tvTodayRecovered.text = context?.getString(R.string.not_declare)
+            valueAnimator(it.todayRecovered.toString(), binding.tvTodayRecovered)
 
-            if (it.todayDeaths != null)
-                valueAnimator(it.todayDeaths.toString(), binding.tvTodayDeaths)
-            else
-                binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
+            valueAnimator(it.todayDeaths.toString(), binding.tvTodayDeaths)
 
 
             entries.add(BarEntry(daysAgo.toFloat()+2, it.todayCases!!.toFloat()))
@@ -158,9 +149,9 @@ class GlobalFragment : CovidAppFragment() {
         barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 
-        if (color == Color.YELLOW) {
+//        if (color == Color.YELLOW) {
             barDataSet.valueFormatter = LargeValueFormatter()
-        }
+//        }
 
         val barData = BarData(barDataSet)
         barData.barWidth = 0.25f
