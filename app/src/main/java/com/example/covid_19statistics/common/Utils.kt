@@ -84,7 +84,7 @@ fun setHistoriesDate(i: Int): String? {
     val now = Date()
     val calendar = Calendar.getInstance()
     calendar.time = now
-    calendar.add(Calendar.DAY_OF_MONTH, -i )
+    calendar.add(Calendar.DAY_OF_MONTH, -i)
     val date = calendar.time
     val simpleDateFormat = SimpleDateFormat("M/d/yy")
     return simpleDateFormat.format(date)

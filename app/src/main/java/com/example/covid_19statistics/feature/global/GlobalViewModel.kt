@@ -8,6 +8,9 @@ import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.global.GlobalRepository
 import com.google.gson.JsonObject
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
+import timber.log.Timber
 
 class GlobalViewModel(
     private val repository: GlobalRepository
@@ -19,6 +22,7 @@ class GlobalViewModel(
 
     init {
         progressBarLiveData.value = true
+
 
         repository.getGlobal()
             .asyncNetworkRequest()

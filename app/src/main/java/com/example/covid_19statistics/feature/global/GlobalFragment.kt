@@ -2,13 +2,12 @@ package com.example.covid_19statistics.feature.global
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
-import com.example.covid_19statistics.data.Country
-import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
 import com.example.covid_19statistics.feature.InfoDialog
@@ -20,6 +19,7 @@ import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 
 
 class GlobalFragment : CovidAppFragment() {
@@ -31,9 +31,6 @@ class GlobalFragment : CovidAppFragment() {
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
     private val infoDialog = InfoDialog()
-
-    private lateinit var todayStatistic: Global
-    private lateinit var yesterday: Global
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,6 +48,7 @@ class GlobalFragment : CovidAppFragment() {
         }
 
         viewModel.historyLiveData.observe(viewLifecycleOwner) {
+
 
             val jsonObject = JSONObject(it.toString())
             val jsonCases = jsonObject.getJSONObject("cases")
@@ -89,27 +87,19 @@ class GlobalFragment : CovidAppFragment() {
                 )
             }
 
-
-            valueAnimator(todayStatistic.cases.toString(), binding.tvAllCases)
-            valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
-            valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
-
-
         }
 
 
         viewModel.globalLiveData.observe(viewLifecycleOwner) {
 
-            todayStatistic = it
-
             binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 
+            valueAnimator(it.cases.toString(), binding.tvAllCases)
+            valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
+            valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
             valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
-
             valueAnimator(it.todayRecovered.toString(), binding.tvTodayRecovered)
-
             valueAnimator(it.todayDeaths.toString(), binding.tvTodayDeaths)
-
 
             entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
             deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths.toFloat()))
@@ -119,9 +109,10 @@ class GlobalFragment : CovidAppFragment() {
 
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
-            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayDeaths.toFloat()))
 
+            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases.toFloat()))
+
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayDeaths.toFloat()))
 
             initialBarChart(binding.barchartCases, entries, Color.YELLOW)
 

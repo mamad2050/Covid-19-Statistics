@@ -17,6 +17,7 @@ import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import timber.log.Timber
 import kotlin.collections.ArrayList
 
 
@@ -48,43 +49,47 @@ class IranFragment : CovidAppFragment() {
 
         viewModel.historyLiveData.observe(viewLifecycleOwner) {
 
-            val jsonObject = JSONObject(it.toString())
-            val jsonTimeLine = jsonObject.getJSONObject("timeline")
-            val jsonCases = jsonTimeLine.getJSONObject("cases")
-            val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
+            try {
 
-            for (i in 0 until daysAgo - 1) {
-                val history = History()
-                val date: String? = setHistoriesDate(i + 2)
-                history.cases = jsonCases.getString(date)
-                history.deaths = jsonDeaths.getString(date)
-                history.date = date
-                histories.add(history)
+                val jsonObject = JSONObject(it.toString())
+                val jsonTimeLine = jsonObject.getJSONObject("timeline")
+                val jsonCases = jsonTimeLine.getJSONObject("cases")
+                val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
+
+                for (i in 0 until daysAgo - 1) {
+                    val history = History()
+                    val date: String? = setHistoriesDate(i + 2)
+                    history.cases = jsonCases.getString(date)
+                    history.deaths = jsonDeaths.getString(date)
+                    history.date = date
+                    histories.add(history)
+                }
+            }catch (e:Exception){
+                Timber.e(e.message)
             }
+                for (i in 0 until histories.size - 1) {
 
-            for (i in 0 until histories.size - 1) {
+                    histories[i].cases =
+                        (histories[i].cases!!.toInt() - histories[i + 1].cases
+                        !!.toInt()).toString()
 
-                histories[i].cases =
-                    (histories[i].cases!!.toInt() - histories[i + 1].cases
-                    !!.toInt()).toString()
+                    histories[i].deaths =
+                        (histories[i].deaths!!.toInt() - histories[i + 1].deaths
+                        !!.toInt()).toString()
 
-                histories[i].deaths =
-                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
-                    !!.toInt()).toString()
-
-                entries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].cases!!.toFloat()
+                    entries.add(
+                        BarEntry(
+                            daysAgo.toFloat() - i.toFloat(),
+                            histories[i].cases!!.toFloat()
+                        )
                     )
-                )
-                deathEntries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].deaths!!.toFloat()
+                    deathEntries.add(
+                        BarEntry(
+                            daysAgo.toFloat() - i.toFloat(),
+                            histories[i].deaths!!.toFloat()
+                        )
                     )
-                )
-            }
+                }
 
 
         }
@@ -114,30 +119,41 @@ class IranFragment : CovidAppFragment() {
                 binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
 
 
-            if (it.todayCases != null) {
-                entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
-                deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths!!.toFloat()))
+            viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
+
+
+                if (histories[0].cases!!.toInt() != yesterday.todayCases &&
+                    histories[0].deaths!!.toInt() != yesterday.todayDeaths &&
+                    it.todayCases != null && it.todayDeaths != null
+                ) {
+
+                    entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases!!.toFloat()))
+                    deathEntries.add(
+                        BarEntry(
+                            daysAgo.toFloat() + 1,
+                            yesterday.todayDeaths!!.toFloat()
+                        )
+                    )
+
+                    entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
+                    deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths.toFloat()))
+
+
+                } else {
+                    entries.add(BarEntry(daysAgo.toFloat() + 1, it.todayCases!!.toFloat()))
+                    deathEntries.add(BarEntry(daysAgo.toFloat() + 1, it.todayDeaths!!.toFloat()))
+                }
+
+
+                initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+
+                initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
             }
 
         }
 
-        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
 
-
-            if (histories[0].cases!!.toInt() != it.todayCases &&
-                histories[0].deaths!!.toInt() != it.todayDeaths) {
-
-                entries.add(BarEntry(daysAgo.toFloat() + 1, it.todayCases!!.toFloat()))
-                deathEntries.add(BarEntry(daysAgo.toFloat() + 1, it.todayDeaths!!.toFloat()))
-
-            }
-
-
-            initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-
-            initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
-
-        }
     }
 
     override fun onDestroy() {

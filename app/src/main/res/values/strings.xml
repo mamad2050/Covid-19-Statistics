@@ -21,5 +21,6 @@
     <string name="cases_barchart_title">نمودار مبتلایان 14 روز گذشته</string>
     <string name="deaths_barchart_title">نمودار فوتی های 14 روز گذشته</string>
     <string name="last_updated_at">آخرین به روز رسانی در </string>
+    <string name="install_bazaar_app">ابتدا باید کافه بازار را نصب کنید</string>
 
 </resources>
