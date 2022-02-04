@@ -11,6 +11,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.covid_19statistics.R
+import com.example.covid_19statistics.common.decimalFormatter
 import com.example.covid_19statistics.common.implementSpringAnimationTrait
 import com.example.covid_19statistics.common.valueAnimator
 import com.example.covid_19statistics.data.Country
@@ -50,6 +51,7 @@ class CountriesAdapter(
 
         private val tvCountryName = itemView.findViewById<TextView>(R.id.tv_country_name)
         private val ivCountry = itemView.findViewById<ImageView>(R.id.iv_country)
+        private val tvPopulation = itemView.findViewById<TextView>(R.id.tv_population)
         private val tvCountryCases = itemView.findViewById<TextView>(R.id.tv_country_cases)
         private val tvCountryRecovered = itemView.findViewById<TextView>(R.id.tv_country_recovered)
         private val tvCountryDeaths = itemView.findViewById<TextView>(R.id.tv_country_deaths)
@@ -61,6 +63,7 @@ class CountriesAdapter(
         fun bindCountry(country: Country) {
 
             tvCountryName.text = country.name
+            tvPopulation.text = "جمعیت : " + decimalFormatter(country.population.toString()) + " نفر "
 
             Glide.with(itemView.context).load(country.countryInfo.flag).into(ivCountry)
 

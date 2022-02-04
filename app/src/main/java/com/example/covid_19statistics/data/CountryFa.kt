@@ -64,7 +64,6 @@ data class CountryFa(
             list.add(CountryFa("CIV", "ساحل عاج"))
             list.add(CountryFa("COD", "جمهوری دموکراتیک کنگو"))
             list.add(CountryFa("DNK", "دانمارک"))
-
             list.add(CountryFa("DJI", "جیبوتی"))
             list.add(CountryFa("DMA", "دومینیکا"))
             list.add(CountryFa("DOM", "جمهوری دومینیکن"))
@@ -104,7 +103,7 @@ data class CountryFa(
             list.add(CountryFa("ISL", "ایسلند"))
             list.add(CountryFa("IND", "هند"))
             list.add(CountryFa("IDN", "اندونزی"))
-            list.add(CountryFa("IRI", "ایران"))
+            list.add(CountryFa("IRN", "ایران"))
             list.add(CountryFa("IRQ", "عراق"))
             list.add(CountryFa("IRL", "ایرلند"))
             list.add(CountryFa("IMN", "جزیره من"))

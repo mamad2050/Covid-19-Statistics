@@ -94,7 +94,8 @@ class IranFragment : CovidAppFragment() {
             valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
             valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
 
-            binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
+            binding.tvUpdated.text =
+                getString(R.string.last_updated_at) + convertMsToDate(it.updated)
 
             if (it.todayCases != null)
                 valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
@@ -113,8 +114,8 @@ class IranFragment : CovidAppFragment() {
 
 
             if (it.todayCases != null) {
-                entries.add(BarEntry(daysAgo.toFloat()+2, it.todayCases.toFloat()))
-                deathEntries.add(BarEntry(daysAgo.toFloat()+2, it.todayDeaths!!.toFloat()))
+                entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
+                deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths!!.toFloat()))
             }
 
         }
@@ -122,8 +123,12 @@ class IranFragment : CovidAppFragment() {
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
 
 
-            entries.add(BarEntry(daysAgo.toFloat()+1, it.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat()+1, it.todayDeaths!!.toFloat()))
+            if (histories[0].cases!!.toInt() != it.todayCases &&
+                histories[0].deaths!!.toInt() != it.todayDeaths) {
+
+                entries.add(BarEntry(daysAgo.toFloat() + 1, it.todayCases!!.toFloat()))
+                deathEntries.add(BarEntry(daysAgo.toFloat() + 1, it.todayDeaths!!.toFloat()))
+            }
 
 
             initialBarChart(binding.barchartCases, entries, Color.YELLOW)

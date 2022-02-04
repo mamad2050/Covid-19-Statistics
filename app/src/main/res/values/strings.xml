@@ -20,5 +20,6 @@
     <string name="sortTitle">مرتب سازی براساس :</string>
     <string name="cases_barchart_title">نمودار مبتلایان 14 روز گذشته</string>
     <string name="deaths_barchart_title">نمودار فوتی های 14 روز گذشته</string>
+    <string name="last_updated_at">آخرین به روز رسانی در </string>
 
 </resources>

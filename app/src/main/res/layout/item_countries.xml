@@ -20,7 +20,7 @@
             android:layout_height="wrap_content">
 
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/linear_country_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -37,20 +37,35 @@
                     android:src="@drawable/iran"
                     app:civ_border_color="@color/white"
                     app:civ_border_width="1dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
+                    android:layout_marginStart="8dp"
                     android:id="@+id/tv_country_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/iv_country"
+                    app:layout_constraintTop_toTopOf="parent"
                     tools:text="ایران" />
 
-            </LinearLayout>
+                <TextView
+                    android:layout_marginEnd="8dp"
+                    android:id="@+id/tv_population"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:textSize="14sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
             <View

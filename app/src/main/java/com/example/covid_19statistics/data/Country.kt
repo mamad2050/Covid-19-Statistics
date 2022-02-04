@@ -17,3 +17,5 @@ data class Country(
     val updated: Long,
     val countryInfo: CountryInfo
 )
+
+
