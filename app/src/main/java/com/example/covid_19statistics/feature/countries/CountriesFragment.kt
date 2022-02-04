@@ -3,8 +3,6 @@ package com.example.covid_19statistics.feature.countries
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,15 +14,14 @@ import com.example.covid_19statistics.data.CountryFa
 import com.example.covid_19statistics.databinding.FragmentCountriesBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.math.log
 
-class CountriesFragment : CovidAppFragment() {
+class CountriesFragment : CovidAppFragment(), TextWatcher {
 
     private var _binding: FragmentCountriesBinding? = null
     private val binding get() = _binding!!
     private val countriesViewModel: CountriesViewModel by viewModel()
     private lateinit var countriesAdapter: CountriesAdapter
-    var defaultDialogIndex = 0
+    var defaultDialogIndex = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,20 +53,7 @@ class CountriesFragment : CovidAppFragment() {
         }
 
 
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                countriesAdapter.filter.filter(p0)
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-
-            }
-
-        })
+        binding.etSearch.addTextChangedListener(this)
 
         countriesViewModel.progressBarLiveData.observe(viewLifecycleOwner) {
             setProgressIndicator(it)
@@ -77,19 +61,17 @@ class CountriesFragment : CovidAppFragment() {
 
         countriesViewModel.countriesLiveData.observe(viewLifecycleOwner) {
 
-            val result = ArrayList<Country>()
 
-            it.forEach { country ->
+            it.forEachIndexed {index , country ->
                 CountryFa.getCountriesList().forEach { fa ->
                     if (country.countryInfo.iso3 == fa.iso3) {
-                        country.name = fa.name
-                        result.add(country)
+                        it[index].name = fa.name
                         CountryFa.getCountriesList().remove(fa)
                     }
                 }
             }
 
-            countriesAdapter = CountriesAdapter(result as MutableList<Country>)
+            countriesAdapter = CountriesAdapter(it as MutableList<Country>)
             binding.rvCountriesFragment.adapter = countriesAdapter
         }
 
@@ -99,6 +81,15 @@ class CountriesFragment : CovidAppFragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+    }
+
+    override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        countriesAdapter.filter.filter(query)    }
+
+    override fun afterTextChanged(p0: Editable?) {
     }
 
 }

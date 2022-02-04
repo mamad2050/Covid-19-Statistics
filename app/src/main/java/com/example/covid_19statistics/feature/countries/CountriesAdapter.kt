@@ -15,7 +15,6 @@ import com.example.covid_19statistics.common.decimalFormatter
 import com.example.covid_19statistics.common.implementSpringAnimationTrait
 import com.example.covid_19statistics.common.valueAnimator
 import com.example.covid_19statistics.data.Country
-import java.util.*
 import kotlin.collections.ArrayList
 
 class CountriesAdapter(
@@ -23,15 +22,15 @@ class CountriesAdapter(
 ) : RecyclerView.Adapter<CountriesAdapter.MyHolder>(), Filterable {
 
 
-    var filterCountryList = ArrayList<Country>()
+    var countryListFiltered = ArrayList<Country>()
 
     init {
-        filterCountryList = countries as ArrayList<Country>
+        countryListFiltered = countries as ArrayList<Country>
 
-        filterCountryList.apply {
-            sortBy { it.todayCases }
-            reverse()
-        }
+//        filterCountryList.apply {
+//            sortBy { it.todayCases }
+//            reverse()
+//        }
 
     }
 
@@ -42,10 +41,10 @@ class CountriesAdapter(
     }
 
     override fun onBindViewHolder(holder: CountriesAdapter.MyHolder, position: Int) {
-        holder.bindCountry(filterCountryList[position])
+        holder.bindCountry(countryListFiltered[position])
     }
 
-    override fun getItemCount(): Int = filterCountryList.size
+    override fun getItemCount(): Int = countryListFiltered.size
 
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -63,28 +62,29 @@ class CountriesAdapter(
         fun bindCountry(country: Country) {
 
             tvCountryName.text = country.name
-            tvPopulation.text = "جمعیت : " + decimalFormatter(country.population.toString()) + " نفر "
+            tvPopulation.text =
+                "جمعیت : " + decimalFormatter(country.population.toString()) + " نفر "
 
             Glide.with(itemView.context).load(country.countryInfo.flag).into(ivCountry)
 
+            if (country.todayCases != null) {
+                tvCountryCases.text = country.todayCases.toString()
 
-            if (country.todayCases != null)
-                valueAnimator(country.todayCases.toString(), tvCountryCases)
-            else
+            } else {
                 tvCountryCases.text = itemView.context.getString(R.string.not_declare)
+            }
 
-
-            if (country.todayRecovered != null)
-                valueAnimator(country.todayRecovered.toString(), tvCountryRecovered)
-            else
+            if (country.todayRecovered != null) {
+                tvCountryRecovered.text = country.todayRecovered.toString()
+            } else {
                 tvCountryRecovered.text = itemView.context.getString(R.string.not_declare)
+            }
 
-
-            if (country.todayDeaths != null)
-                valueAnimator(country.todayDeaths.toString(), tvCountryDeaths)
-            else
+            if (country.todayDeaths != null) {
+                tvCountryDeaths.text = country.todayDeaths.toString()
+            } else {
                 tvCountryDeaths.text = itemView.context.getString(R.string.not_declare)
-
+            }
 
             valueAnimator(country.cases.toString(), tvCountryAllCases)
             valueAnimator(country.recovered.toString(), tvCountryAllRecovered)
@@ -101,29 +101,25 @@ class CountriesAdapter(
     override fun getFilter(): Filter {
         return object : Filter() {
             override fun performFiltering(constraint: CharSequence?): FilterResults {
-                val charSearch = constraint.toString()
-                filterCountryList = if (charSearch.isEmpty()) {
-                    countries as ArrayList<Country>
-                } else {
-                    val resultList = ArrayList<Country>()
-                    for (country in countries) {
-                        if (country.name.lowercase(Locale.ROOT)
-                                .contains(charSearch.lowercase(Locale.ROOT))
-                        ) {
-                            resultList.add(country)
-                        }
-                    }
-                    resultList
-
+                val charString = constraint.toString()
+                countryListFiltered = if (charString.isEmpty()) countries as ArrayList<Country>
+                else{
+                    val result = ArrayList<Country>()
+                    countries.filter {
+                        (it.name.contains(constraint!!))
+                    }.forEach { result.add(it) }
+                    result
                 }
-                val filterResults = FilterResults()
-                filterResults.values = filterCountryList
-                return filterResults
+
+              return  FilterResults().apply { values = countryListFiltered }
             }
 
             @SuppressLint("NotifyDataSetChanged")
-            override fun publishResults(constraint: CharSequence?, p1: FilterResults?) {
-                filterCountryList = p1?.values as ArrayList<Country>
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                countryListFiltered = if (results?.values==null)
+                    ArrayList()
+                else
+                    results.values as ArrayList<Country>
                 notifyDataSetChanged()
             }
 
@@ -133,32 +129,32 @@ class CountriesAdapter(
     fun sortCountries(index: Int) {
 
         when (index) {
-            0 -> filterCountryList.apply {
+            0 -> countryListFiltered.apply {
                 sortBy { it.todayCases }
                 reverse()
             }
-            1 -> filterCountryList.sortBy { it.todayCases }
+            1 -> countryListFiltered.sortBy { it.todayCases }
 
 
-            2 -> filterCountryList.apply {
+            2 -> countryListFiltered.apply {
                 sortBy { it.todayDeaths }
                 reverse()
             }
-            3 -> filterCountryList.sortBy { it.todayDeaths }
+            3 -> countryListFiltered.sortBy { it.todayDeaths }
 
 
-            4 -> filterCountryList.apply {
+            4 -> countryListFiltered.apply {
                 sortBy { it.cases }
                 reverse()
             }
-            5 -> filterCountryList.sortBy { it.cases }
+            5 -> countryListFiltered.sortBy { it.cases }
 
 
-            6 -> filterCountryList.apply {
+            6 -> countryListFiltered.apply {
                 sortBy { it.deaths }
                 reverse()
             }
-            7 -> filterCountryList.sortBy { it.deaths }
+            7 -> countryListFiltered.sortBy { it.deaths }
         }
 
         notifyDataSetChanged()

@@ -129,6 +129,7 @@ class IranFragment : CovidAppFragment() {
 
                 entries.add(BarEntry(daysAgo.toFloat() + 1, it.todayCases!!.toFloat()))
                 deathEntries.add(BarEntry(daysAgo.toFloat() + 1, it.todayDeaths!!.toFloat()))
+
             }
 
 

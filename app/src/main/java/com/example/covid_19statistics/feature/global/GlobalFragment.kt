@@ -32,8 +32,8 @@ class GlobalFragment : CovidAppFragment() {
     private var deathEntries = ArrayList<BarEntry>()
     private val infoDialog = InfoDialog()
 
-    private lateinit var todayStatistic : Global
-    private lateinit var yesterday : Global
+    private lateinit var todayStatistic: Global
+    private lateinit var yesterday: Global
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,10 +55,10 @@ class GlobalFragment : CovidAppFragment() {
             val jsonObject = JSONObject(it.toString())
             val jsonCases = jsonObject.getJSONObject("cases")
             val jsonDeaths = jsonObject.getJSONObject("deaths")
-            //
-            for (i in 0..daysAgo.toInt() - 2) {
+
+            for (i in 0 until daysAgo - 1) {
                 val history = History()
-                val date: String? = setHistoriesDate(i + 1)
+                val date: String? = setHistoriesDate(i + 2)
                 history.cases = jsonCases.getString(date)
                 history.deaths = jsonDeaths.getString(date)
                 history.date = date
@@ -111,16 +111,16 @@ class GlobalFragment : CovidAppFragment() {
             valueAnimator(it.todayDeaths.toString(), binding.tvTodayDeaths)
 
 
-            entries.add(BarEntry(daysAgo.toFloat()+2, it.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat()+2, it.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths.toFloat()))
 
 
         }
 
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
 
-            entries.add(BarEntry(daysAgo.toFloat()+1, yesterday.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat()+1, yesterday.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayDeaths.toFloat()))
 
 
             initialBarChart(binding.barchartCases, entries, Color.YELLOW)
@@ -149,9 +149,7 @@ class GlobalFragment : CovidAppFragment() {
         barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 
-//        if (color == Color.YELLOW) {
-            barDataSet.valueFormatter = LargeValueFormatter()
-//        }
+        barDataSet.valueFormatter = LargeValueFormatter()
 
         val barData = BarData(barDataSet)
         barData.barWidth = 0.25f
