@@ -68,19 +68,19 @@ class CountriesAdapter(
             Glide.with(itemView.context).load(country.countryInfo.flag).into(ivCountry)
 
             if (country.todayCases != null) {
-                tvCountryCases.text = country.todayCases.toString()
+                tvCountryCases.text = decimalFormatter(country.todayCases.toString())
 
             } else {
                 tvCountryCases.text = itemView.context.getString(R.string.not_declare)
             }
 
             if (country.todayRecovered != null) {
-                tvCountryRecovered.text = country.todayRecovered.toString()
+                tvCountryRecovered.text = decimalFormatter(country.todayRecovered.toString())
             } else {
                 tvCountryRecovered.text = itemView.context.getString(R.string.not_declare)
             }
             if (country.todayDeaths != null) {
-                tvCountryDeaths.text = country.todayDeaths.toString()
+                tvCountryDeaths.text = decimalFormatter(country.todayDeaths.toString())
             } else {
                 tvCountryDeaths.text = itemView.context.getString(R.string.not_declare)
             }

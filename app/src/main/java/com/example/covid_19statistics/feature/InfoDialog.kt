@@ -31,14 +31,12 @@ class InfoDialog : DialogFragment() {
         val ivClose = view.findViewById<ImageView>(R.id.iv_close)
         val ivTelegram = view.findViewById<ImageView>(R.id.iv_telegram)
         val btnVote = view.findViewById<MaterialButton>(R.id.btn_vote)
-        val etRange = view.findViewById<EditText>(R.id.et_range)
 
         btnVote.setOnClickListener {
             rateApp()
         }
 
         ivClose.setOnClickListener {
-//            daysAgo = etRange.text.toString().toInt()
             dismiss()
         }
 

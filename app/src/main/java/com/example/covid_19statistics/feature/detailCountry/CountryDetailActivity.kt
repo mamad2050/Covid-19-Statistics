@@ -33,6 +33,11 @@ class CountryDetailActivity : CovidAppActivity() {
         setContentView(binding.root)
 
 
+        binding.btnBack.setOnClickListener {
+            onBackPressed()
+        }
+
+
         viewModel.progressBarLiveData.observe(this) {
             setProgressIndicator(it)
         }
@@ -143,7 +148,8 @@ class CountryDetailActivity : CovidAppActivity() {
         valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
         valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
         binding.tvUpdated.text =
-            getString(R.string.last_updated_at) + convertMsToDate(todayStatistic.updated)
+            "${getString(R.string.last_updated_at)} ${convertMsToDate(todayStatistic.updated)}"
+
 
 
         /*set today statistics*/
