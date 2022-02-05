@@ -1,7 +1,10 @@
 package com.example.covid_19statistics.data
 
+import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Country(
     val cases: Int,
     @SerializedName("country")
@@ -16,6 +19,6 @@ data class Country(
     val todayRecovered: Int?,
     val updated: Long,
     val countryInfo: CountryInfo
-)
+):Parcelable
 
 

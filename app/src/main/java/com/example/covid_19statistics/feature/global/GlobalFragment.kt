@@ -89,7 +89,6 @@ class GlobalFragment : CovidAppFragment() {
 
         }
 
-
         viewModel.globalLiveData.observe(viewLifecycleOwner) {
 
             binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
@@ -104,11 +103,9 @@ class GlobalFragment : CovidAppFragment() {
             entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
             deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths.toFloat()))
 
-
         }
 
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
-
 
             entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases.toFloat()))
 

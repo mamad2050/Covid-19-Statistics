@@ -19,19 +19,19 @@ import kotlin.collections.ArrayList
 
 class CountriesAdapter(
     private var countries: MutableList<Country>,
+    private var itemClickListener: ItemClickListener
 ) : RecyclerView.Adapter<CountriesAdapter.MyHolder>(), Filterable {
 
 
     var countryListFiltered = ArrayList<Country>()
 
+
     init {
         countryListFiltered = countries as ArrayList<Country>
-
 //        filterCountryList.apply {
 //            sortBy { it.todayCases }
 //            reverse()
 //        }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CountriesAdapter.MyHolder {
@@ -86,7 +86,6 @@ class CountriesAdapter(
             }
 
 
-
             valueAnimator(country.cases.toString(), tvCountryAllCases)
             valueAnimator(country.recovered.toString(), tvCountryAllRecovered)
             valueAnimator(country.deaths.toString(), tvCountryAllDeaths)
@@ -94,10 +93,9 @@ class CountriesAdapter(
             itemView.implementSpringAnimationTrait()
 
             itemView.setOnClickListener {
-
+                itemClickListener.onCountryClick(country)
             }
         }
-
 
 
     }
@@ -107,7 +105,7 @@ class CountriesAdapter(
             override fun performFiltering(constraint: CharSequence?): FilterResults {
                 val charString = constraint.toString()
                 countryListFiltered = if (charString.isEmpty()) countries as ArrayList<Country>
-                else{
+                else {
                     val result = ArrayList<Country>()
                     countries.filter {
                         (it.name.contains(constraint!!))
@@ -115,12 +113,12 @@ class CountriesAdapter(
                     result
                 }
 
-              return  FilterResults().apply { values = countryListFiltered }
+                return FilterResults().apply { values = countryListFiltered }
             }
 
             @SuppressLint("NotifyDataSetChanged")
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                countryListFiltered = if (results?.values==null)
+                countryListFiltered = if (results?.values == null)
                     ArrayList()
                 else
                     results.values as ArrayList<Country>
@@ -166,6 +164,10 @@ class CountriesAdapter(
 
     }
 
+    interface ItemClickListener {
 
+        fun onCountryClick(country: Country)
+
+    }
 
 }

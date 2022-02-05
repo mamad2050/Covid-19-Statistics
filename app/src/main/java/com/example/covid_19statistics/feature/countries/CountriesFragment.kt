@@ -1,5 +1,6 @@
 package com.example.covid_19statistics.feature.countries
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,13 +10,15 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppFragment
+import com.example.covid_19statistics.common.EXTRA_KEY_COUNTRY
 import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.CountryFa
 import com.example.covid_19statistics.databinding.FragmentCountriesBinding
+import com.example.covid_19statistics.feature.detailCountry.CountryDetailActivity
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class CountriesFragment : CovidAppFragment(), TextWatcher {
+class CountriesFragment : CovidAppFragment(), TextWatcher, CountriesAdapter.ItemClickListener {
 
     private var _binding: FragmentCountriesBinding? = null
     private val binding get() = _binding!!
@@ -62,7 +65,7 @@ class CountriesFragment : CovidAppFragment(), TextWatcher {
         countriesViewModel.countriesLiveData.observe(viewLifecycleOwner) {
 
 
-            it.forEachIndexed {index , country ->
+            it.forEachIndexed { index, country ->
                 CountryFa.getCountriesList().forEach { fa ->
                     if (country.countryInfo.iso3 == fa.iso3) {
                         it[index].name = fa.name
@@ -71,7 +74,7 @@ class CountriesFragment : CovidAppFragment(), TextWatcher {
                 }
             }
 
-            countriesAdapter = CountriesAdapter(it as MutableList<Country>)
+            countriesAdapter = CountriesAdapter(it as MutableList<Country>, this)
             binding.rvCountriesFragment.adapter = countriesAdapter
         }
 
@@ -87,9 +90,16 @@ class CountriesFragment : CovidAppFragment(), TextWatcher {
     }
 
     override fun onTextChanged(query: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        countriesAdapter.filter.filter(query)    }
+        countriesAdapter.filter.filter(query)
+    }
 
     override fun afterTextChanged(p0: Editable?) {
+    }
+
+    override fun onCountryClick(country: Country) {
+        startActivity(Intent(activity, CountryDetailActivity::class.java).apply {
+            putExtra(EXTRA_KEY_COUNTRY, country)
+        })
     }
 
 }

@@ -11,6 +11,7 @@ import com.example.covid_19statistics.data.iran.IranRemoteDataSource
 import com.example.covid_19statistics.data.iran.IranRepository
 import com.example.covid_19statistics.data.iran.IranRepositoryImpl
 import com.example.covid_19statistics.feature.countries.CountriesViewModel
+import com.example.covid_19statistics.feature.detailCountry.CountryDetailViewModel
 import com.example.covid_19statistics.feature.global.GlobalViewModel
 import com.example.covid_19statistics.feature.iran.IranViewModel
 import com.example.covid_19statistics.services.http.createApiServiceInstance
@@ -28,7 +29,7 @@ class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        RxJavaPlugins.setErrorHandler { throwable: Throwable? -> }
+        RxJavaPlugins.setErrorHandler { }
 
         Fresco.initialize(this)
 
@@ -46,6 +47,7 @@ class MyApp : Application() {
             viewModel { CountriesViewModel(get()) }
             viewModel { GlobalViewModel(get()) }
             viewModel { IranViewModel(get()) }
+            viewModel { CountryDetailViewModel(get()) }
         }
 
         startKoin {
@@ -53,18 +55,6 @@ class MyApp : Application() {
             modules(myModules)
         }
 
-//        RxJavaPlugins.setErrorHandler { e ->
-//            if (e is UndeliverableException) {
-//                // Merely log undeliverable exceptions
-//                Timber.e(e.message)
-//            } else {
-//                // Forward all others to current thread's uncaught exception handler
-//                Thread.currentThread().also { thread ->
-//                    thread.uncaughtExceptionHandler.uncaughtException(thread, e)
-//                }
-//            }
-//
-//        }
     }
 
 }
