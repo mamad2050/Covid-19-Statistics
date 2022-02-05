@@ -16,6 +16,8 @@ import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.math.abs
+
 
 class CountryDetailActivity : CovidAppActivity() {
 
@@ -78,16 +80,13 @@ class CountryDetailActivity : CovidAppActivity() {
                     (histories[i].deaths!!.toInt() - histories[i + 1].deaths
                     !!.toInt()).toString()
 
-                entries.add(
-                    BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
-                        histories[i].cases!!.toFloat()
-                    )
-                )
+                entries.add(BarEntry(daysAgo.toFloat() - i.toFloat(),
+                    abs(histories[i].cases!!.toFloat())
+                ))
                 deathEntries.add(
                     BarEntry(
                         daysAgo.toFloat() - i.toFloat(),
-                        histories[i].deaths!!.toFloat()
+                        abs(histories[i].deaths!!.toFloat())
                     )
                 )
             }
