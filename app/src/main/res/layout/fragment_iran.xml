@@ -325,7 +325,6 @@
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-
                 <com.example.covid_19statistics.view.RoundedBarChart
                     android:id="@+id/barchart_cases"
                     android:layout_width="match_parent"

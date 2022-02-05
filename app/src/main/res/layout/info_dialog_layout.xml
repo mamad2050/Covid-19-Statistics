@@ -33,7 +33,7 @@
             android:layout_below="@id/img_dialog"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             android:text="نسخه 1.0"
             android:textSize="16sp" />
 
@@ -58,13 +58,24 @@
             android:text="برنامه نویس : محمد زاهدی نژاد"
             android:textSize="14sp" />
 
+        <EditText
+            android:textSize="10sp"
+            android:textColorHint="?colorSecondary"
+            android:id="@+id/et_range"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txt_programmer"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp"
+            android:hint="بازه زمانی نمودار" />
+
         <ImageView
             android:id="@+id/iv_telegram"
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_below="@id/txt_programmer"
+            android:layout_below="@id/et_range"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="16dp"
             android:src="@drawable/ic_tel" />
 
         <com.google.android.material.button.MaterialButton

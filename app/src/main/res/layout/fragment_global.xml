@@ -62,6 +62,7 @@
                     tools:text="ساعت 7 و 6 دقیقه" />
 
                 <ImageView
+                    android:alpha="0.7"
                     android:id="@+id/btn_info"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

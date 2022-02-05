@@ -23,5 +23,6 @@
     <string name="last_updated_at"> آخرین به روز رسانی در </string>
     <string name="install_bazaar_app">ابتدا باید کافه بازار را نصب کنید</string>
     <string name="setting">تنظیمات</string>
+    <string name="change">تغییر</string>
 
 </resources>
