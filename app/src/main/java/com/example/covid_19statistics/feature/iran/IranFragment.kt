@@ -182,33 +182,20 @@ class IranFragment : CovidAppFragment() {
 
         /*set barchart values */
 
-        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()) {
+
+        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()
+            && todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ){
 
             entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + 1,
-                    yesterdayStatistic.todayDeaths!!.toFloat()
-                )
-            )
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths!!.toFloat()))
 
             entries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + 2,
-                    todayStatistic.todayDeaths!!.toFloat()
-                )
-            )
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayDeaths!!.toFloat()))
 
-        } else if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null) {
+        }else if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ) {
 
             entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + 1,
-                    todayStatistic.todayDeaths!!.toFloat()
-                )
-            )
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayDeaths!!.toFloat()))
 
         }
 
