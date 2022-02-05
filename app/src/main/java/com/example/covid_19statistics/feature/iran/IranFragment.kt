@@ -2,11 +2,14 @@ package com.example.covid_19statistics.feature.iran
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
+import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentIranBinding
 import com.github.mikephil.charting.charts.BarChart
@@ -30,6 +33,8 @@ class IranFragment : CovidAppFragment() {
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
 
+    private lateinit var todayStatistic: Country
+    private lateinit var yesterdayStatistic: Country
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,107 +54,62 @@ class IranFragment : CovidAppFragment() {
 
         viewModel.historyLiveData.observe(viewLifecycleOwner) {
 
-            try {
 
-                val jsonObject = JSONObject(it.toString())
-                val jsonTimeLine = jsonObject.getJSONObject("timeline")
-                val jsonCases = jsonTimeLine.getJSONObject("cases")
-                val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
+            val jsonObject = JSONObject(it.toString())
+            val jsonTimeLine = jsonObject.getJSONObject("timeline")
+            val jsonCases = jsonTimeLine.getJSONObject("cases")
+            val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
 
-                for (i in 0 until daysAgo - 1) {
-                    val history = History()
-                    val date: String? = setHistoriesDate(i + 2)
-                    history.cases = jsonCases.getString(date)
-                    history.deaths = jsonDeaths.getString(date)
-                    history.date = date
-                    histories.add(history)
-                }
-            }catch (e:Exception){
-                Timber.e(e.message)
+            for (i in 0 until daysAgo) {
+                val history = History()
+                val date: String? = setHistoriesDate(i + 2)
+                history.cases = jsonCases.getString(date)
+                history.deaths = jsonDeaths.getString(date)
+                history.date = date
+                histories.add(history)
             }
-                for (i in 0 until histories.size - 1) {
 
-                    histories[i].cases =
-                        (histories[i].cases!!.toInt() - histories[i + 1].cases
-                        !!.toInt()).toString()
 
-                    histories[i].deaths =
-                        (histories[i].deaths!!.toInt() - histories[i + 1].deaths
-                        !!.toInt()).toString()
 
-                    entries.add(
-                        BarEntry(
-                            daysAgo.toFloat() - i.toFloat(),
-                            histories[i].cases!!.toFloat()
-                        )
+            for (i in 0 until histories.size - 1) {
+
+                histories[i].cases =
+                    (histories[i].cases!!.toInt() - histories[i + 1].cases
+                    !!.toInt()).toString()
+
+                histories[i].deaths =
+                    (histories[i].deaths!!.toInt() - histories[i + 1].deaths
+                    !!.toInt()).toString()
+
+                entries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        histories[i].cases!!.toFloat()
                     )
-                    deathEntries.add(
-                        BarEntry(
-                            daysAgo.toFloat() - i.toFloat(),
-                            histories[i].deaths!!.toFloat()
-                        )
+                )
+                deathEntries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        histories[i].deaths!!.toFloat()
                     )
-                }
-
+                )
+            }
 
         }
 
+
         viewModel.iranLiveData.observe(viewLifecycleOwner) {
 
-            valueAnimator(it.cases.toString(), binding.tvAllCases)
-            valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
-            valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
+            todayStatistic = it
 
-            binding.tvUpdated.text =
-                getString(R.string.last_updated_at) + convertMsToDate(it.updated)
-
-            if (it.todayCases != null)
-                valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
-            else
-                binding.tvTodayCases.text = context?.getString(R.string.not_declare)
-
-            if (it.todayRecovered != null)
-                valueAnimator(it.todayRecovered.toString(), binding.tvTodayRecovered)
-            else
-                binding.tvTodayRecovered.text = context?.getString(R.string.not_declare)
-
-            if (it.todayDeaths != null)
-                valueAnimator(it.todayDeaths.toString(), binding.tvTodayDeaths)
-            else
-                binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
+        }
 
 
-            viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
+        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
 
+            yesterdayStatistic = it
 
-                if (histories[0].cases!!.toInt() != yesterday.todayCases &&
-                    histories[0].deaths!!.toInt() != yesterday.todayDeaths &&
-                    it.todayCases != null && it.todayDeaths != null
-                ) {
-
-                    entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases!!.toFloat()))
-                    deathEntries.add(
-                        BarEntry(
-                            daysAgo.toFloat() + 1,
-                            yesterday.todayDeaths!!.toFloat()
-                        )
-                    )
-
-                    entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
-                    deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths.toFloat()))
-
-
-                } else {
-                    entries.add(BarEntry(daysAgo.toFloat() + 1, it.todayCases!!.toFloat()))
-                    deathEntries.add(BarEntry(daysAgo.toFloat() + 1, it.todayDeaths!!.toFloat()))
-                }
-
-
-                initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-
-                initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
-
-            }
+            setStatisticsOnViews()
 
         }
 
@@ -183,7 +143,6 @@ class IranFragment : CovidAppFragment() {
         barDataSet.valueTextSize = 10f
         barDataSet.valueTypeface = binding.tvCountryName.typeface
 
-
         barChart.setDrawBorders(false)
         barChart.setDrawGridBackground(false)
         barChart.legend.isEnabled = false
@@ -194,4 +153,63 @@ class IranFragment : CovidAppFragment() {
         barChart.isAutoScaleMinMaxEnabled = true
 
     }
+
+    private fun setStatisticsOnViews() {
+
+        /*set total statistics*/
+
+        valueAnimator(todayStatistic.cases.toString(), binding.tvAllCases)
+        valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
+        valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
+        binding.tvUpdated.text =
+            getString(R.string.last_updated_at) + convertMsToDate(todayStatistic.updated)
+
+
+        /*set today statistics*/
+
+        if (todayStatistic.todayCases != null)
+            valueAnimator(todayStatistic.todayCases.toString(), binding.tvTodayCases)
+        else
+            binding.tvTodayCases.text = context?.getString(R.string.not_declare)
+
+        if (todayStatistic.todayRecovered != null)
+            valueAnimator(todayStatistic.todayRecovered.toString(), binding.tvTodayRecovered)
+        else
+            binding.tvTodayRecovered.text = context?.getString(R.string.not_declare)
+
+        if (todayStatistic.todayDeaths != null)
+            valueAnimator(todayStatistic.todayDeaths.toString(), binding.tvTodayDeaths)
+        else
+            binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
+
+        /*set barchart values */
+
+        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()){
+            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases!!.toFloat()))
+            deathEntries.add(
+                BarEntry(
+                    daysAgo.toFloat() + 1,
+                    yesterdayStatistic.todayDeaths!!.toFloat()
+                )
+            )
+
+            entries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayDeaths!!.toFloat()))
+        }else {
+            entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayDeaths!!.toFloat()))
+        }
+
+
+        if (entries.size == 15) entries.removeAt(12)
+        if (deathEntries.size == 15) deathEntries.removeAt(12)
+
+
+        initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+        initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
+
+    }
+
+
 }

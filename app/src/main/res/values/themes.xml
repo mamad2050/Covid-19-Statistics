@@ -38,7 +38,7 @@
         <item name="textAppearanceCaption">@style/TextAppearance.MyTheme.Caption</item>
         <item name="textAppearanceOverline">@style/TextAppearance.MyTheme.Overline</item>
 
-        <item name="android:navigationBarColor">@color/dark_purple</item>
+        <item name="android:navigationBarColor" tools:targetApi = "l"> @color/dark_purple</item>
 
     </style>
 

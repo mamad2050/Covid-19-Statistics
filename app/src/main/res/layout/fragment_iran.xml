@@ -329,9 +329,9 @@
                     android:id="@+id/barchart_cases"
                     android:layout_width="match_parent"
                     android:layout_height="200dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_below="@id/tv5"
                     android:layout_marginHorizontal="8dp"
+                    android:layout_marginBottom="8dp"
                     android:background="@drawable/bg_chart"
                     app:radius="8dp" />
 
@@ -356,7 +356,7 @@
                     android:layout_marginHorizontal="8dp"
                     android:layout_marginBottom="16dp"
                     android:background="@drawable/bg_chart"
-                    app:radius="4dp" />
+                    app:radius="8dp" />
 
 
             </RelativeLayout>

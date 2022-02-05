@@ -10,7 +10,7 @@ android {
     compileSdk 31
     defaultConfig {
         applicationId "com.example.covid_19statistics"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 31
         versionCode 1
         versionName "1.0"

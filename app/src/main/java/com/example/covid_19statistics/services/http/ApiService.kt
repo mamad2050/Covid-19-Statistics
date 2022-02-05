@@ -31,7 +31,7 @@ interface ApiService {
     @GET("all?yesterday=1&allowNull=1")
     fun getGlobalYesterday(): Observable<Global>
 
-    @GET("historical/{location}?lastdays=$daysAgo")
+    @GET("historical/{location}?lastdays=${daysAgo + 1}")
     fun getHistory(@Path("location") location: String): Observable<JsonObject>
 
 }

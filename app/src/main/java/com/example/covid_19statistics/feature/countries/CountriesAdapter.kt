@@ -79,12 +79,13 @@ class CountriesAdapter(
             } else {
                 tvCountryRecovered.text = itemView.context.getString(R.string.not_declare)
             }
-
             if (country.todayDeaths != null) {
                 tvCountryDeaths.text = country.todayDeaths.toString()
             } else {
                 tvCountryDeaths.text = itemView.context.getString(R.string.not_declare)
             }
+
+
 
             valueAnimator(country.cases.toString(), tvCountryAllCases)
             valueAnimator(country.recovered.toString(), tvCountryAllRecovered)
@@ -96,6 +97,9 @@ class CountriesAdapter(
 
             }
         }
+
+
+
     }
 
     override fun getFilter(): Filter {
@@ -161,5 +165,7 @@ class CountriesAdapter(
 
 
     }
+
+
 
 }
