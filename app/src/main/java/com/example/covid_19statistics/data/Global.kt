@@ -10,5 +10,6 @@ data class Global(
     val todayCases: Int,
     val todayDeaths: Int,
     val todayRecovered: Int,
-    val updated: Long
+    val updated: Long,
+    val population: Long
 )

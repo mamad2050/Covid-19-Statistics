@@ -1,12 +1,16 @@
 package com.example.covid_19statistics.feature.global
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
+import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
 import com.example.covid_19statistics.feature.InfoDialog
@@ -29,6 +33,8 @@ class GlobalFragment : CovidAppFragment() {
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
     private val infoDialog = InfoDialog()
+    private lateinit var todayStatistic : Global
+    private lateinit var yesterdayStatistic : Global
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -89,29 +95,19 @@ class GlobalFragment : CovidAppFragment() {
 
         viewModel.todayLiveData.observe(viewLifecycleOwner) {
 
-            binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 
-            valueAnimator(it.cases.toString(), binding.tvAllCases)
-            valueAnimator(it.recovered.toString(), binding.tvAllRecovered)
-            valueAnimator(it.deaths.toString(), binding.tvAllDeaths)
-            valueAnimator(it.todayCases.toString(), binding.tvTodayCases)
-            valueAnimator(it.todayRecovered.toString(), binding.tvTodayRecovered)
-            valueAnimator(it.todayDeaths.toString(), binding.tvTodayDeaths)
+            todayStatistic = it
 
-            entries.add(BarEntry(daysAgo.toFloat() + 2, it.todayCases.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, it.todayDeaths.toFloat()))
+
+
 
         }
 
-        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) { yesterday ->
+        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
 
-            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayCases.toFloat()))
+        yesterdayStatistic = it
 
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterday.todayDeaths.toFloat()))
-
-            initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-
-            initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+            setStatisticsOnViews()
 
         }
 
@@ -163,5 +159,49 @@ class GlobalFragment : CovidAppFragment() {
         barChart.isAutoScaleMinMaxEnabled = true
 
     }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun setStatisticsOnViews() {
+
+
+        /*set total statistics*/
+
+        valueAnimator(todayStatistic.cases.toString(), binding.tvAllCases)
+        valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
+        valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
+        binding.tvUpdated.text =
+            "${getString(R.string.last_updated_at)} ${convertMsToDate(todayStatistic.updated)}"
+
+
+        /*set today statistics*/
+
+        valueAnimator(todayStatistic.todayCases.toString(), binding.tvTodayCases)
+
+        valueAnimator(todayStatistic.todayRecovered.toString(), binding.tvTodayRecovered)
+
+        valueAnimator(todayStatistic.todayDeaths.toString(), binding.tvTodayDeaths)
+
+        /*set barchart values */
+
+
+        entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases.toFloat()))
+        deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths.toFloat()))
+
+        entries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayCases.toFloat()))
+        deathEntries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayDeaths.toFloat()))
+
+        initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+
+        initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
+
+
+        initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+        initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
+
+    }
+
 
 }

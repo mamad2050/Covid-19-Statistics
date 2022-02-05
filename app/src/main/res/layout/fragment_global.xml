@@ -48,17 +48,18 @@
                     app:layout_constraintStart_toEndOf="@+id/iv_country"
                     app:layout_constraintTop_toTopOf="parent" />
 
-
                 <TextView
+                    android:layout_marginTop="2dp"
                     android:id="@+id/tv_updated"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginStart="8dp"
                     android:textSize="12sp"
+                    android:layout_marginStart="16dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/tv_country_name"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="ساعت 7 و 6 دقیقه" />
 
                 <ImageView
                     android:id="@+id/btn_info"
@@ -81,6 +82,7 @@
                 android:layout_marginHorizontal="8dp"
                 android:alpha="0.05"
                 android:background="?dividerColor" />
+
 
             <TextView
                 android:id="@+id/tv2"
