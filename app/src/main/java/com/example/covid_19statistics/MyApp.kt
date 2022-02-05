@@ -1,15 +1,13 @@
 package com.example.covid_19statistics
 
 import android.app.Application
-import com.example.covid_19statistics.data.countries.CountryRemoteDataSource
-import com.example.covid_19statistics.data.countries.CountryRepository
-import com.example.covid_19statistics.data.countries.CountryRepositoryImpl
+import android.os.Bundle
+import com.example.covid_19statistics.data.country.CountryRemoteDataSource
+import com.example.covid_19statistics.data.country.CountryRepository
+import com.example.covid_19statistics.data.country.CountryRepositoryImpl
 import com.example.covid_19statistics.data.global.GlobalRemoteDataSource
 import com.example.covid_19statistics.data.global.GlobalRepository
 import com.example.covid_19statistics.data.global.GlobalRepositoryImpl
-import com.example.covid_19statistics.data.iran.IranRemoteDataSource
-import com.example.covid_19statistics.data.iran.IranRepository
-import com.example.covid_19statistics.data.iran.IranRepositoryImpl
 import com.example.covid_19statistics.feature.countries.CountriesViewModel
 import com.example.covid_19statistics.feature.detailCountry.CountryDetailViewModel
 import com.example.covid_19statistics.feature.global.GlobalViewModel
@@ -42,12 +40,12 @@ class MyApp : Application() {
 
             factory<CountryRepository> { CountryRepositoryImpl(CountryRemoteDataSource(get())) }
             factory<GlobalRepository> { GlobalRepositoryImpl(GlobalRemoteDataSource(get())) }
-            factory<IranRepository> { IranRepositoryImpl(IranRemoteDataSource(get())) }
+
 
             viewModel { CountriesViewModel(get()) }
             viewModel { GlobalViewModel(get()) }
             viewModel { IranViewModel(get()) }
-            viewModel { CountryDetailViewModel(get()) }
+            viewModel { (bundle: Bundle )-> CountryDetailViewModel(bundle,get()) }
         }
 
         startKoin {

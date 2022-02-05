@@ -2,7 +2,6 @@ package com.example.covid_19statistics.feature.global
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +18,6 @@ import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 
 class GlobalFragment : CovidAppFragment() {
@@ -89,7 +87,7 @@ class GlobalFragment : CovidAppFragment() {
 
         }
 
-        viewModel.globalLiveData.observe(viewLifecycleOwner) {
+        viewModel.todayLiveData.observe(viewLifecycleOwner) {
 
             binding.tvUpdated.text = "آخرین به روز رسانی در " + convertMsToDate(it.updated)
 

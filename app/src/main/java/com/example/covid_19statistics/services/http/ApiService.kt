@@ -17,22 +17,23 @@ import retrofit2.http.Path
 interface ApiService {
 
     @GET("countries?allowNull=1")
-    fun getCountries(): Observable<List<Country>>
+    fun getAllCountries(): Observable<List<Country>>
 
-    @GET("countries/ir?allowNull=1")
-    fun getIran(): Observable<Country>
+    @GET("countries/{iso3}?allowNull=1")
+    fun getTodayCountry(@Path("iso3") location: String): Observable<Country>
+
+    @GET("countries/{iso3}?yesterday=1&allowNull=1")
+    fun getYesterdayCountry(@Path("iso3") location: String): Observable<Country>
 
     @GET("all")
     fun getGlobal(): Observable<Global>
 
-    @GET("countries/iran?yesterday=1&allowNull=1")
-    fun getIranYesterday(): Observable<Country>
 
     @GET("all?yesterday=1&allowNull=1")
     fun getGlobalYesterday(): Observable<Global>
 
-    @GET("historical/{location}?lastdays=${daysAgo + 1}")
-    fun getHistory(@Path("location") location: String): Observable<JsonObject>
+    @GET("historical/{iso3}?lastdays=${daysAgo + 1}")
+    fun getHistory(@Path("iso3") iso3: String): Observable<JsonObject>
 
 }
 

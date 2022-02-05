@@ -1,23 +1,19 @@
 package com.example.covid_19statistics.feature.iran
 
-import android.app.usage.NetworkStats
 import androidx.lifecycle.MutableLiveData
-import com.example.covid_19statistics.common.CovidAppSingleObserver
+import com.example.covid_19statistics.common.CovidAppObserver
 import com.example.covid_19statistics.common.CovidAppViewModel
 import com.example.covid_19statistics.common.asyncNetworkRequest
 import com.example.covid_19statistics.data.Country
-import com.example.covid_19statistics.data.iran.IranRepository
+import com.example.covid_19statistics.data.country.CountryRepository
 import com.google.gson.JsonObject
-import io.reactivex.Completable
-import io.reactivex.exceptions.UndeliverableException
-import io.reactivex.plugins.RxJavaPlugins
-import timber.log.Timber
+
 
 class IranViewModel(
-    private val repository: IranRepository
+    private val repository: CountryRepository
 ) : CovidAppViewModel() {
 
-    val iranLiveData = MutableLiveData<Country>()
+    val todayLiveData = MutableLiveData<Country>()
     val yesterdayLiveData = MutableLiveData<Country>()
     val historyLiveData = MutableLiveData<JsonObject>()
 
@@ -27,23 +23,23 @@ class IranViewModel(
 
 
 
-        repository.getIran()
+        repository.getToday("irn")
             .asyncNetworkRequest()
-            .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
+            .subscribe(object : CovidAppObserver<Country>(compositeDisposable) {
                 override fun onNext(t: Country) {
-                    iranLiveData.value = t
+                    todayLiveData.value = t
                 }
                 override fun onComplete() {
-                    repository.getHistory("ir")
+                    repository.getHistory("irn")
                         .asyncNetworkRequest()
-                        .subscribe(object : CovidAppSingleObserver<JsonObject>(compositeDisposable) {
+                        .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable) {
                             override fun onNext(t: JsonObject) {
                                 historyLiveData.value = t
                             }
                             override fun onComplete() {
-                                repository.getYesterday()
+                                repository.getYesterday("irn")
                                     .asyncNetworkRequest()
-                                    .subscribe(object : CovidAppSingleObserver<Country>(compositeDisposable) {
+                                    .subscribe(object : CovidAppObserver<Country>(compositeDisposable) {
                                         override fun onNext(t: Country) {
                                             yesterdayLiveData.value = t
                                         }

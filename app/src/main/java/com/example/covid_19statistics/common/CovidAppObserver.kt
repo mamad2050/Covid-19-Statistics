@@ -8,7 +8,7 @@ import io.reactivex.disposables.Disposable
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber
 
-abstract class CovidAppSingleObserver<T>(private val compositeDisposable: CompositeDisposable) :
+abstract class CovidAppObserver<T>(private val compositeDisposable: CompositeDisposable) :
     Observer<T> {
 
     override fun onSubscribe(d: Disposable) {

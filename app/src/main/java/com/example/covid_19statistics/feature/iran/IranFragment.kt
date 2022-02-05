@@ -2,11 +2,9 @@ package com.example.covid_19statistics.feature.iran
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.Country
@@ -16,11 +14,9 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 import kotlin.collections.ArrayList
 
 
@@ -98,7 +94,7 @@ class IranFragment : CovidAppFragment() {
         }
 
 
-        viewModel.iranLiveData.observe(viewLifecycleOwner) {
+        viewModel.todayLiveData.observe(viewLifecycleOwner) {
 
             todayStatistic = it
 
@@ -185,19 +181,18 @@ class IranFragment : CovidAppFragment() {
         /*set barchart values */
 
         if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()){
+
             entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + 1,
-                    yesterdayStatistic.todayDeaths!!.toFloat()
-                )
-            )
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths!!.toFloat()))
 
             entries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayCases!!.toFloat()))
             deathEntries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayDeaths!!.toFloat()))
-        }else {
+
+        }else if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ) {
+
             entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
             deathEntries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayDeaths!!.toFloat()))
+
         }
 
 
