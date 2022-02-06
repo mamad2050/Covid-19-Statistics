@@ -170,20 +170,48 @@ class CountryDetailActivity : CovidAppActivity() {
 
         /*set barchart values */
 
-        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()
-            && todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ){
+        var casesCounter = 1
+        var deathCounter = 1
 
-            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths!!.toFloat()))
+        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt() && yesterdayStatistic.todayCases != null){
 
-            entries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, yesterdayStatistic.todayCases!!.toFloat()))
+            casesCounter+=1
 
-        }else if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ) {
+        }else if (yesterdayStatistic.todayCases == null) {
 
-            entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayDeaths!!.toFloat()))
+            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
+            casesCounter+=1
+        }
 
+        if (yesterdayStatistic.todayDeaths != histories[0].deaths!!.toInt() && yesterdayStatistic.todayDeaths!=null){
+
+            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, yesterdayStatistic.todayDeaths!!.toFloat()))
+            deathCounter+=1
+
+        }else if (yesterdayStatistic.todayDeaths == null) {
+
+            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
+            deathCounter+=1
+        }
+
+
+        if (todayStatistic.todayCases != null) {
+
+            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, todayStatistic.todayCases!!.toFloat()))
+
+        }else if (todayStatistic.todayCases == null) {
+
+            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
+        }
+
+        if (todayStatistic.todayDeaths != null) {
+
+            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, todayStatistic.todayDeaths!!.toFloat()))
+
+        } else if (todayStatistic.todayDeaths == null) {
+
+            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
         }
 
 

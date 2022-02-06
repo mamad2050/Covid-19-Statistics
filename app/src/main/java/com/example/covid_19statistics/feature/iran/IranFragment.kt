@@ -185,27 +185,25 @@ class IranFragment : CovidAppFragment() {
 
         /*set barchart values */
 
+        var counter = 1
+
+        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()){
+            entries.add(BarEntry(daysAgo.toFloat() + counter, yesterdayStatistic.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + counter, yesterdayStatistic.todayDeaths!!.toFloat()))
+            counter+=1
+        }
 
 
-        if (histories[0].cases!!.toInt() == yesterdayStatistic.todayCases &&
-            todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ){
-            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths!!.toFloat()))
-            entries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, todayStatistic.todayDeaths!!.toFloat()))
+        if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null) {
 
-        }else if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null ) {
+            entries.add(BarEntry(daysAgo.toFloat() + counter, todayStatistic.todayCases!!.toFloat()))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + counter, todayStatistic.todayDeaths!!.toFloat()))
 
-            entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayDeaths!!.toFloat()))
+        } else {
 
-        }else if (todayStatistic.todayCases == null && todayStatistic.todayDeaths == null){
+            entries.add(BarEntry(daysAgo.toFloat() + counter, 0f))
+            deathEntries.add(BarEntry(daysAgo.toFloat() + counter, 0f))
 
-            entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths!!.toFloat()))
-
-            entries.add(BarEntry(daysAgo.toFloat() + 2, 0f))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 2, 0f))
         }
 
 
