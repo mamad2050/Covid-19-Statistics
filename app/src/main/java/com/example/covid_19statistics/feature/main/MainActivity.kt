@@ -1,5 +1,6 @@
 package com.example.covid_19statistics.feature.main
 
+import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -8,12 +9,8 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
-import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.databinding.ActivityMainBinding
-import com.google.android.material.button.MaterialButton
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
+import java.util.*
 
 
 class MainActivity : CovidAppActivity() {
@@ -23,6 +20,7 @@ class MainActivity : CovidAppActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setConfiguration()
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -46,6 +44,14 @@ class MainActivity : CovidAppActivity() {
 
     }
 
+ fun setConfiguration(){
 
+    val locale = Locale("us")
+    Locale.setDefault(locale)
+    val configuration: Configuration = baseContext.resources.configuration
+    configuration.locale = locale
+    baseContext.resources.updateConfiguration(configuration, baseContext.resources.displayMetrics)
+
+}
 
 }

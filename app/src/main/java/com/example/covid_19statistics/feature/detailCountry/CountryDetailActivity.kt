@@ -1,5 +1,6 @@
 package com.example.covid_19statistics.feature.detailCountry
 
+import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import com.bumptech.glide.Glide
@@ -21,6 +22,7 @@ import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 
@@ -36,6 +38,7 @@ class CountryDetailActivity : CovidAppActivity() {
     private var deathEntries = ArrayList<BarEntry>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setConfiguration()
         super.onCreate(savedInstanceState)
         binding = ActivityDetailCountryBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -348,5 +351,15 @@ class CountryDetailActivity : CovidAppActivity() {
     override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
+    }
+
+    fun setConfiguration(){
+
+        val locale = Locale("us")
+        Locale.setDefault(locale)
+        val configuration: Configuration = baseContext.resources.configuration
+        configuration.locale = locale
+        baseContext.resources.updateConfiguration(configuration, baseContext.resources.displayMetrics)
+
     }
 }
