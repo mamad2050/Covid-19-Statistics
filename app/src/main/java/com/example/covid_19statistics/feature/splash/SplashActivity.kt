@@ -9,14 +9,20 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.Toast
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
+import com.example.covid_19statistics.common.ExceptionMapper
+import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.databinding.ActivitySplashBinding
 import com.example.covid_19statistics.feature.main.MainActivity
+import com.google.android.material.button.MaterialButton
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
+import java.net.UnknownHostException
 
 
-class SplashActivity : CovidAppActivity(){
+class SplashActivity : CovidAppActivity() {
 
     private lateinit var binding: ActivitySplashBinding
 
@@ -29,14 +35,10 @@ class SplashActivity : CovidAppActivity(){
 
         checkNetworkCondition()
 
-        binding.btnRetry.setOnClickListener {
-        checkNetworkCondition()
-        }
-
     }
 
     private fun checkNetworkConnection(): Boolean {
-
+        showConnectionLost(false)
         val cm = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -53,7 +55,6 @@ class SplashActivity : CovidAppActivity(){
     }
 
     private fun goToHomeActivity() {
-
         Handler(Looper.getMainLooper()).postDelayed({
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
@@ -63,28 +64,14 @@ class SplashActivity : CovidAppActivity(){
 
     private fun checkNetworkCondition() {
         if (checkNetworkConnection()) {
-            binding.lottieContainer.visibility = View.VISIBLE
-            binding.spinkit.visibility = View.VISIBLE
-
-            binding.btnRetry.visibility = View.GONE
-            binding.ivConnectionLost.visibility = View.GONE
-            binding.tvConnectionLost.visibility = View.GONE
             goToHomeActivity()
         } else {
-            noNetwork()
+            val connectionView = showConnectionLost(true)
+            connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+                checkNetworkCondition()
+            }
         }
     }
-
-    private fun noNetwork() {
-
-        binding.lottieContainer.visibility = View.GONE
-        binding.spinkit.visibility = View.GONE
-        binding.btnRetry.visibility = View.VISIBLE
-        binding.ivConnectionLost.visibility = View.VISIBLE
-        binding.tvConnectionLost.visibility = View.VISIBLE
-
-    }
-
 
 
     private fun hideStatusBar() {
@@ -93,4 +80,29 @@ class SplashActivity : CovidAppActivity(){
         decorView.systemUiVisibility = uiOptions
         supportActionBar?.hide()
     }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showError(covidAppEvent: CovidAppEvent) {
+        when (covidAppEvent.type) {
+            CovidAppEvent.Type.SOMETHING_WRONG -> {
+                val connectionView = showSomethingWrong(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btnBack)?.setOnClickListener {
+                    showSomethingWrong(false)
+                    finish()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
 }

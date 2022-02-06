@@ -5,6 +5,7 @@ import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
+import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.ActivityDetailCountryBinding
@@ -13,18 +14,23 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.LargeValueFormatter
+import com.google.android.material.button.MaterialButton
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
+import kotlin.collections.ArrayList
 import kotlin.math.abs
 
 
 class CountryDetailActivity : CovidAppActivity() {
 
-    private lateinit var binding : ActivityDetailCountryBinding
-    private val viewModel : CountryDetailViewModel by viewModel{ parametersOf(intent.extras)  }
-    private lateinit var todayStatistic : Country
-    private lateinit var yesterdayStatistic : Country
+    private lateinit var binding: ActivityDetailCountryBinding
+    private val viewModel: CountryDetailViewModel by viewModel { parametersOf(intent.extras) }
+    private lateinit var todayStatistic: Country
+    private lateinit var yesterdayStatistic: Country
     private var histories = ArrayList<History>()
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
@@ -46,7 +52,7 @@ class CountryDetailActivity : CovidAppActivity() {
 
 
 
-        viewModel.todayLiveData.observe(this){
+        viewModel.todayLiveData.observe(this) {
             todayStatistic = it
 
         }
@@ -80,9 +86,12 @@ class CountryDetailActivity : CovidAppActivity() {
                     (histories[i].deaths!!.toInt() - histories[i + 1].deaths
                     !!.toInt()).toString()
 
-                entries.add(BarEntry(daysAgo.toFloat() - i.toFloat(),
-                    abs(histories[i].cases!!.toFloat())
-                ))
+                entries.add(
+                    BarEntry(
+                        daysAgo.toFloat() - i.toFloat(),
+                        abs(histories[i].cases!!.toFloat())
+                    )
+                )
                 deathEntries.add(
                     BarEntry(
                         daysAgo.toFloat() - i.toFloat(),
@@ -94,7 +103,7 @@ class CountryDetailActivity : CovidAppActivity() {
         }
 
 
-        viewModel.yesterdayLiveData.observe(this){
+        viewModel.yesterdayLiveData.observe(this) {
             yesterdayStatistic = it
 
             setStatisticsOnViews()
@@ -150,7 +159,6 @@ class CountryDetailActivity : CovidAppActivity() {
             "${getString(R.string.last_updated_at)} ${convertMsToDate(todayStatistic.updated)}"
 
 
-
         /*set today statistics*/
 
         if (todayStatistic.todayCases != null)
@@ -173,46 +181,131 @@ class CountryDetailActivity : CovidAppActivity() {
         var casesCounter = 1
         var deathCounter = 1
 
-        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt() && yesterdayStatistic.todayCases != null){
 
-            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, yesterdayStatistic.todayCases!!.toFloat()))
-            casesCounter+=1
+        if (getYesterdayDate() != histories[0].date) {
 
-        }else if (yesterdayStatistic.todayCases == null) {
+            if (yesterdayStatistic.todayCases != null) {
+                entries.add(
+                    BarEntry(
+                        daysAgo.toFloat() + casesCounter,
+                        yesterdayStatistic.todayCases!!.toFloat()
+                    )
+                )
+                casesCounter += 1
+            } else {
+                entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
+                casesCounter += 1
+            }
 
-            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
-            casesCounter+=1
-        }
 
-        if (yesterdayStatistic.todayDeaths != histories[0].deaths!!.toInt() && yesterdayStatistic.todayDeaths!=null){
+            if (yesterdayStatistic.todayDeaths != null) {
+                deathEntries.add(
+                    BarEntry(
+                        daysAgo.toFloat() + deathCounter,
+                        yesterdayStatistic.todayDeaths!!.toFloat()
+                    )
+                )
+                deathCounter += 1
+            } else {
+                deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
+                deathCounter += 1
+            }
 
-            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, yesterdayStatistic.todayDeaths!!.toFloat()))
-            deathCounter+=1
-
-        }else if (yesterdayStatistic.todayDeaths == null) {
-
-            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
-            deathCounter+=1
         }
 
 
         if (todayStatistic.todayCases != null) {
 
-            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, todayStatistic.todayCases!!.toFloat()))
+            entries.add(
+                BarEntry(
+                    daysAgo.toFloat() + casesCounter,
+                    todayStatistic.todayCases!!.toFloat()
+                )
+            )
 
-        }else if (todayStatistic.todayCases == null) {
+        } else if (todayStatistic.todayCases == null) {
 
             entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
         }
 
         if (todayStatistic.todayDeaths != null) {
 
-            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, todayStatistic.todayDeaths!!.toFloat()))
+            deathEntries.add(
+                BarEntry(
+                    daysAgo.toFloat() + deathCounter,
+                    todayStatistic.todayDeaths!!.toFloat()
+                )
+            )
 
         } else if (todayStatistic.todayDeaths == null) {
 
             deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
         }
+
+
+//        var casesCounter = 1
+//        var deathCounter = 1
+//
+//        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt() && yesterdayStatistic.todayCases != null) {
+//
+//            entries.add(
+//                BarEntry(
+//                    daysAgo.toFloat() + casesCounter,
+//                    yesterdayStatistic.todayCases!!.toFloat()
+//                )
+//            )
+//            casesCounter += 1
+//
+//        } else if (yesterdayStatistic.todayCases == null) {
+//
+//            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
+//            casesCounter += 1
+//        }
+//
+//        if (yesterdayStatistic.todayDeaths != histories[0].deaths!!.toInt() && yesterdayStatistic.todayDeaths != null) {
+//
+//            deathEntries.add(
+//                BarEntry(
+//                    daysAgo.toFloat() + deathCounter,
+//                    yesterdayStatistic.todayDeaths!!.toFloat()
+//                )
+//            )
+//            deathCounter += 1
+//
+//        } else if (yesterdayStatistic.todayDeaths == null) {
+//
+//            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
+//            deathCounter += 1
+//        }
+//
+//
+//        if (todayStatistic.todayCases != null) {
+//
+//            entries.add(
+//                BarEntry(
+//                    daysAgo.toFloat() + casesCounter,
+//                    todayStatistic.todayCases!!.toFloat()
+//                )
+//            )
+//
+//        } else if (todayStatistic.todayCases == null) {
+//
+//            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
+//        }
+//
+//        if (todayStatistic.todayDeaths != null) {
+//
+//            deathEntries.add(
+//                BarEntry(
+//                    daysAgo.toFloat() + deathCounter,
+//                    todayStatistic.todayDeaths!!.toFloat()
+//                )
+//            )
+//
+//        } else if (todayStatistic.todayDeaths == null) {
+//
+//            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
+//        }
 
 
         if (entries.size == 15) entries.removeAt(12)
@@ -225,4 +318,25 @@ class CountryDetailActivity : CovidAppActivity() {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showError(covidAppEvent: CovidAppEvent){
+        when(covidAppEvent.type){
+            CovidAppEvent.Type.SOMETHING_WRONG -> {
+                val connectionView = showSomethingWrong(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btnBack)?.setOnClickListener {
+                    showSomethingWrong(false)
+                    finish()
+                }
+            }
+        }
+    }
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 }

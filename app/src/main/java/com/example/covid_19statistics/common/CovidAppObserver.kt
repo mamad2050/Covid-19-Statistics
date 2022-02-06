@@ -16,6 +16,7 @@ abstract class CovidAppObserver<T>(private val compositeDisposable: CompositeDis
     }
 
     override fun onError(e: Throwable) {
+        EventBus.getDefault().post(ExceptionMapper.map(e))
         Timber.e(e)
     }
 

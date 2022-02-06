@@ -24,5 +24,6 @@
     <string name="install_bazaar_app">ابتدا باید کافه بازار را نصب کنید</string>
     <string name="setting">تنظیمات</string>
     <string name="change">تغییر</string>
+    <string name="unknown_error">خطای نامشخص</string>
 
 </resources>

@@ -102,3 +102,11 @@ fun convertMsToDate(dateMs: Long): String {
     return pDateFormatter.format(persianDate) + " ساعت " + pTimeFormatter.format(persianDate);
 }
 
+
+
+fun getYesterdayDate(): String {
+    val dateFormat = SimpleDateFormat("M/d/yy", Locale.ENGLISH)
+    val cal: Calendar = Calendar.getInstance()
+    cal.add(Calendar.DATE, -1)
+    return dateFormat.format(cal.time)
+}

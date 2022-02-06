@@ -62,9 +62,43 @@ interface CovidAppView {
         }
     }
 
+    fun showSomethingWrong(mustShow: Boolean): View? {
 
+        rootView?.let {
+            viewContext?.let { context ->
+                var somethingWrong = it.findViewById<View>(R.id.somethingWrongRootView)
+                if (somethingWrong == null) {
+                    somethingWrong = LayoutInflater.from(context)
+                        .inflate(R.layout.view_something_wrong, it, false)
+                    it.addView(somethingWrong)
+                }
+                somethingWrong.visibility = if (mustShow) View.VISIBLE else View.GONE
+                return somethingWrong
+            }
+        }
+        return null
+    }
+
+
+    fun showConnectionLost(mustShow: Boolean): View? {
+
+        rootView?.let {
+            viewContext?.let { context ->
+                var connectionLost = it.findViewById<View>(R.id.connectionLostRootView)
+                if (connectionLost == null) {
+                    connectionLost = LayoutInflater.from(context)
+                        .inflate(R.layout.view_connection_lost, it, false)
+                    it.addView(connectionLost)
+                }
+                connectionLost.visibility = if (mustShow) View.VISIBLE else View.GONE
+                return connectionLost
+            }
+        }
+        return null
+    }
 
 }
+
 
 
 abstract class CovidAppViewModel:ViewModel(){

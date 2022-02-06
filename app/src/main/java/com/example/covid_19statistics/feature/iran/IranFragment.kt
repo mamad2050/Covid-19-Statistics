@@ -165,9 +165,6 @@ class IranFragment : CovidAppFragment() {
 
         /*set today statistics*/
 
-
-
-
         if (todayStatistic.todayCases != null)
             valueAnimator(todayStatistic.todayCases.toString(), binding.tvTodayCases)
         else
@@ -187,7 +184,7 @@ class IranFragment : CovidAppFragment() {
 
         var counter = 1
 
-        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt()){
+        if (getYesterdayDate() != histories[0].date){
             entries.add(BarEntry(daysAgo.toFloat() + counter, yesterdayStatistic.todayCases!!.toFloat()))
             deathEntries.add(BarEntry(daysAgo.toFloat() + counter, yesterdayStatistic.todayDeaths!!.toFloat()))
             counter+=1
