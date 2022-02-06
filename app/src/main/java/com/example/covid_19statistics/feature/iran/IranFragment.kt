@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentIranBinding
 import com.github.mikephil.charting.charts.BarChart
@@ -16,6 +17,10 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.LargeValueFormatter
+import com.google.android.material.button.MaterialButton
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlin.collections.ArrayList
@@ -213,6 +218,28 @@ class IranFragment : CovidAppFragment() {
 
 
     }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showError(covidAppEvent: CovidAppEvent) {
+        when (covidAppEvent.type) {
+            CovidAppEvent.Type.CONNECTION_LOST -> {
+                val connectionView = showConnectionLost(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+                    showConnectionLost(false)
+                    viewModel.showData()
+                }
+            }
 
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 
 }

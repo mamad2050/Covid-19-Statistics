@@ -16,20 +16,25 @@ class CountriesViewModel(
 
     init {
 
+showData()
+        }
+
+    fun showData(){
         progressBarLiveData.value = true
 
-            countryRepository.getCountries()
-                .subscribeOn(Schedulers.io())
-                .doFinally { progressBarLiveData.postValue(false) }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object : CovidAppObserver<List<Country>>(compositeDisposable) {
-                    override fun onNext(t: List<Country>) {
-                        countriesLiveData.value = t
-                    }
+        countryRepository.getCountries()
+            .subscribeOn(Schedulers.io())
+            .doFinally { progressBarLiveData.postValue(false) }
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(object : CovidAppObserver<List<Country>>(compositeDisposable) {
+                override fun onNext(t: List<Country>) {
+                    countriesLiveData.value = t
+                }
 
-                    override fun onComplete() {
-                    }
+                override fun onComplete() {
+                }
 
-                })
-        }
+            })
+    }
+
     }

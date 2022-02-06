@@ -6,6 +6,7 @@ import org.json.JSONObject
 import retrofit2.adapter.rxjava2.HttpException
 
 import timber.log.Timber
+import java.net.ConnectException
 import java.net.UnknownHostException
 
 class ExceptionMapper {
@@ -23,7 +24,7 @@ class ExceptionMapper {
                    } catch (exception: Exception) {
                        Timber.e(exception)
                    }
-               } else if (throwable is UnknownHostException) {
+               } else if (throwable is UnknownHostException || throwable is ConnectException) {
                    return CovidAppEvent(CovidAppEvent.Type.CONNECTION_LOST, stringMessage = "")
                }
 

@@ -19,9 +19,12 @@ class IranViewModel(
 
     init {
 
+        showData()
+
+    }
+
+    fun showData(){
         progressBarLiveData.value = true
-
-
 
         repository.getToday("irn")
             .asyncNetworkRequest()

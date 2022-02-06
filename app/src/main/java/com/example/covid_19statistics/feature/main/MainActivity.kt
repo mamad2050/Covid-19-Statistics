@@ -1,17 +1,19 @@
 package com.example.covid_19statistics.feature.main
 
-import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.View
 import android.widget.Toast
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
+import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.databinding.ActivityMainBinding
+import com.google.android.material.button.MaterialButton
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 
 class MainActivity : CovidAppActivity() {

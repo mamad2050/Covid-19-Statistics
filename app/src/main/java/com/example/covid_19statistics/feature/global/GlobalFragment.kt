@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
 import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.data.Global
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentGlobalBinding
@@ -20,6 +21,10 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.DefaultValueFormatter
 import com.github.mikephil.charting.formatter.LargeValueFormatter
+import com.google.android.material.button.MaterialButton
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -33,8 +38,8 @@ class GlobalFragment : CovidAppFragment() {
     private var entries = ArrayList<BarEntry>()
     private var deathEntries = ArrayList<BarEntry>()
     private val infoDialog = InfoDialog()
-    private lateinit var todayStatistic : Global
-    private lateinit var yesterdayStatistic : Global
+    private lateinit var todayStatistic: Global
+    private lateinit var yesterdayStatistic: Global
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -99,13 +104,11 @@ class GlobalFragment : CovidAppFragment() {
             todayStatistic = it
 
 
-
-
         }
 
         viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
 
-        yesterdayStatistic = it
+            yesterdayStatistic = it
 
             setStatisticsOnViews()
 
@@ -195,13 +198,33 @@ class GlobalFragment : CovidAppFragment() {
 
         initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
 
-
-
         initialBarChart(binding.barchartCases, entries, Color.YELLOW)
         initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
 
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showError(covidAppEvent: CovidAppEvent) {
+        when (covidAppEvent.type) {
+            CovidAppEvent.Type.CONNECTION_LOST -> {
+                val connectionView = showConnectionLost(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+                    showConnectionLost(false)
+                    viewModel.showData()
+                }
+            }
 
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
 }

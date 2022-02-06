@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
+import android.widget.Toast
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
 import com.example.covid_19statistics.common.ExceptionMapper
@@ -66,6 +67,8 @@ class SplashActivity : CovidAppActivity() {
         if (checkNetworkConnection()) {
             goToHomeActivity()
         } else {
+
+            Toast.makeText(this,"اینترنت قطعه !",Toast.LENGTH_SHORT).show()
             val connectionView = showConnectionLost(true)
             connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
                 checkNetworkCondition()

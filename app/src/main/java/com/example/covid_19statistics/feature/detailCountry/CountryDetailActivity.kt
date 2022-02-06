@@ -319,8 +319,8 @@ class CountryDetailActivity : CovidAppActivity() {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    fun showError(covidAppEvent: CovidAppEvent){
-        when(covidAppEvent.type){
+    fun showError(covidAppEvent: CovidAppEvent) {
+        when (covidAppEvent.type) {
             CovidAppEvent.Type.SOMETHING_WRONG -> {
                 val connectionView = showSomethingWrong(true)
                 connectionView?.findViewById<MaterialButton>(R.id.btnBack)?.setOnClickListener {
@@ -328,8 +328,18 @@ class CountryDetailActivity : CovidAppActivity() {
                     finish()
                 }
             }
+
+            CovidAppEvent.Type.CONNECTION_LOST -> {
+                val connectionView = showConnectionLost(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+                 showConnectionLost(false)
+                 viewModel.showData()
+                }
+            }
+
         }
     }
+
     override fun onStart() {
         super.onStart()
         EventBus.getDefault().register(this)

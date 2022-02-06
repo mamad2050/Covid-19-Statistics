@@ -13,16 +13,21 @@ import com.example.covid_19statistics.common.CovidAppFragment
 import com.example.covid_19statistics.common.EXTRA_KEY_COUNTRY
 import com.example.covid_19statistics.data.Country
 import com.example.covid_19statistics.data.CountryFa
+import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.databinding.FragmentCountriesBinding
 import com.example.covid_19statistics.feature.detailCountry.CountryDetailActivity
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CountriesFragment : CovidAppFragment(), TextWatcher, CountriesAdapter.ItemClickListener {
 
     private var _binding: FragmentCountriesBinding? = null
     private val binding get() = _binding!!
-    private val countriesViewModel: CountriesViewModel by viewModel()
+    private val viewModel: CountriesViewModel by viewModel()
     private lateinit var countriesAdapter: CountriesAdapter
     var defaultDialogIndex = -1
 
@@ -58,11 +63,11 @@ class CountriesFragment : CovidAppFragment(), TextWatcher, CountriesAdapter.Item
 
         binding.etSearch.addTextChangedListener(this)
 
-        countriesViewModel.progressBarLiveData.observe(viewLifecycleOwner) {
+        viewModel.progressBarLiveData.observe(viewLifecycleOwner) {
             setProgressIndicator(it)
         }
 
-        countriesViewModel.countriesLiveData.observe(viewLifecycleOwner) {
+        viewModel.countriesLiveData.observe(viewLifecycleOwner) {
 
 
             it.forEachIndexed { index, country ->
@@ -100,6 +105,35 @@ class CountriesFragment : CovidAppFragment(), TextWatcher, CountriesAdapter.Item
         startActivity(Intent(activity, CountryDetailActivity::class.java).apply {
             putExtra(EXTRA_KEY_COUNTRY, country)
         })
+    }
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showError(covidAppEvent: CovidAppEvent) {
+        when (covidAppEvent.type) {
+            CovidAppEvent.Type.CONNECTION_LOST -> {
+                val connectionView = showConnectionLost(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+                    showConnectionLost(false)
+                    viewModel.showData()
+                }
+            }
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showConnectionLost(false)
+        viewModel.showData()
     }
 
 }

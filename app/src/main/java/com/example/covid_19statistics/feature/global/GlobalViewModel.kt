@@ -17,6 +17,11 @@ class GlobalViewModel(
     var yesterdayLiveData = MutableLiveData<Global>()
 
     init {
+
+showData()
+    }
+
+     fun showData(){
         progressBarLiveData.value = true
 
 
@@ -55,6 +60,5 @@ class GlobalViewModel(
                 }
 
             })
-
     }
 }

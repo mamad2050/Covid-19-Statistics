@@ -11,7 +11,7 @@ import com.example.covid_19statistics.data.country.CountryRepository
 import com.google.gson.JsonObject
 
 class CountryDetailViewModel(
-    bundle: Bundle,
+    val bundle: Bundle,
     val repository: CountryRepository
 ) : CovidAppViewModel() {
 
@@ -20,36 +20,41 @@ class CountryDetailViewModel(
     var historyLiveData = MutableLiveData<JsonObject>()
 
     init {
-    progressBarLiveData.value = true
 
-    todayLiveData.value = bundle.getParcelable(EXTRA_KEY_COUNTRY)
+        showData()
+    }
+
+    fun showData() {
+        progressBarLiveData.value = true
+
+        todayLiveData.value = bundle.getParcelable(EXTRA_KEY_COUNTRY)
 
 
-     repository.getHistory(todayLiveData.value!!.countryInfo.iso3)
-         .asyncNetworkRequest()
-         .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable){
-             override fun onNext(t: JsonObject) {
-                 historyLiveData.value = t
-             }
+        repository.getHistory(todayLiveData.value!!.countryInfo.iso3)
+            .asyncNetworkRequest()
+            .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable) {
+                override fun onNext(t: JsonObject) {
+                    historyLiveData.value = t
+                }
 
-             override fun onComplete() {
+                override fun onComplete() {
 
-                 repository.getYesterday(todayLiveData.value!!.countryInfo.iso3)
-                     .asyncNetworkRequest()
-                     .subscribe(object : CovidAppObserver<Country>(compositeDisposable){
-                         override fun onNext(t: Country) {
-                             yesterdayLiveData.value = t
-                         }
+                    repository.getYesterday(todayLiveData.value!!.countryInfo.iso3)
+                        .asyncNetworkRequest()
+                        .subscribe(object : CovidAppObserver<Country>(compositeDisposable) {
+                            override fun onNext(t: Country) {
+                                yesterdayLiveData.value = t
+                            }
 
-                         override fun onComplete() {
-                             progressBarLiveData.postValue(false)                         }
+                            override fun onComplete() {
+                                progressBarLiveData.postValue(false)
+                            }
 
-                     })
+                        })
 
-             }
+                }
 
-         })
-
+            })
     }
 
 }
