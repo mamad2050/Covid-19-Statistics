@@ -3,6 +3,7 @@ package com.example.covid_19statistics.feature.iran
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +14,19 @@ import com.example.covid_19statistics.data.CovidAppEvent
 import com.example.covid_19statistics.data.History
 import com.example.covid_19statistics.databinding.FragmentIranBinding
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.LargeValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.button.MaterialButton
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import kotlin.collections.ArrayList
+import timber.log.Timber
 
 
 class IranFragment : CovidAppFragment() {
@@ -129,8 +132,8 @@ class IranFragment : CovidAppFragment() {
         val barData = BarData(barDataSet)
         barData.barWidth = 0.25f
         barData.setValueTextColor(Color.WHITE)
-        barDataSet.valueFormatter = LargeValueFormatter()
 
+        barDataSet.valueFormatter = LargeValueFormatter()
         barChart.animateY(500)
         barChart.rotation = 360f
         barChart.destroyDrawingCache()
@@ -138,6 +141,7 @@ class IranFragment : CovidAppFragment() {
         barChart.data = barData
         val xAxis = barChart.xAxis
         xAxis.isEnabled = false
+
         val yAxis = barChart.axisLeft
         yAxis.isEnabled = false
         val yAxis2 = barChart.axisRight
@@ -189,17 +193,39 @@ class IranFragment : CovidAppFragment() {
 
         var counter = 1
 
-        if (getYesterdayDate() != histories[0].date){
-            entries.add(BarEntry(daysAgo.toFloat() + counter, yesterdayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + counter, yesterdayStatistic.todayDeaths!!.toFloat()))
-            counter+=1
+
+        if (getYesterdayDate() != histories[0].date ) {
+
+            entries.add(
+                BarEntry(
+                    daysAgo.toFloat() + counter,
+                    yesterdayStatistic.todayCases!!.toFloat()
+                )
+            )
+            deathEntries.add(
+                BarEntry(
+                    daysAgo.toFloat() + counter,
+                    yesterdayStatistic.todayDeaths!!.toFloat()
+                )
+            )
+            counter += 1
         }
 
 
         if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null) {
 
-            entries.add(BarEntry(daysAgo.toFloat() + counter, todayStatistic.todayCases!!.toFloat()))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + counter, todayStatistic.todayDeaths!!.toFloat()))
+            entries.add(
+                BarEntry(
+                    daysAgo.toFloat() + counter,
+                    todayStatistic.todayCases!!.toFloat()
+                )
+            )
+            deathEntries.add(
+                BarEntry(
+                    daysAgo.toFloat() + counter,
+                    todayStatistic.todayDeaths!!.toFloat()
+                )
+            )
 
         } else {
 
@@ -218,6 +244,7 @@ class IranFragment : CovidAppFragment() {
 
 
     }
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun showError(covidAppEvent: CovidAppEvent) {
         when (covidAppEvent.type) {
@@ -241,5 +268,6 @@ class IranFragment : CovidAppFragment() {
         super.onStop()
         EventBus.getDefault().unregister(this)
     }
+
 
 }

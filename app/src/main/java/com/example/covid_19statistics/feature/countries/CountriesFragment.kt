@@ -133,7 +133,6 @@ class CountriesFragment : CovidAppFragment(), TextWatcher, CountriesAdapter.Item
     override fun onResume() {
         super.onResume()
         showConnectionLost(false)
-        viewModel.showData()
     }
 
 }

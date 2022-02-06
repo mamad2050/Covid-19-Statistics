@@ -107,7 +107,7 @@ fun convertMsToDate(dateMs: Long): String {
 fun getYesterdayDate(): String {
     val dateFormat = SimpleDateFormat("M/d/yy", Locale.ENGLISH)
     val cal: Calendar = Calendar.getInstance()
-    cal.add(Calendar.DATE, -1)
+    cal.add(Calendar.DATE, -2)
     return dateFormat.format(cal.time)
 }
 
