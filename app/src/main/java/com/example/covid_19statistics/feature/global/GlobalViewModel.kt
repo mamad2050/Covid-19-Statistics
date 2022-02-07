@@ -8,6 +8,7 @@ import com.example.covid_19statistics.common.DAYS_AGO
 import com.example.covid_19statistics.data.model.Global
 import com.example.covid_19statistics.data.global.GlobalRepository
 import com.google.gson.JsonObject
+import timber.log.Timber
 
 class GlobalViewModel(
     private val repository: GlobalRepository
@@ -15,7 +16,7 @@ class GlobalViewModel(
 
     var historyLiveData = MutableLiveData<JsonObject>()
     var todayLiveData = MutableLiveData<Global>()
-    var yesterdayLiveData = MutableLiveData<Global>()
+
 
     init {
 
@@ -36,7 +37,7 @@ class GlobalViewModel(
                 override fun onComplete() {
 
                     /* get history statistic */
-                    repository.getHistory("all", "lastdays=${DAYS_AGO+1}" )
+                    repository.getHistory("all", (DAYS_AGO+1).toString() )
                         .asyncNetworkRequest()
                         .subscribe(object :
                             CovidAppObserver<JsonObject>(compositeDisposable) {

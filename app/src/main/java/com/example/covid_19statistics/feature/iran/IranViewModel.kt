@@ -33,7 +33,7 @@ class IranViewModel(
                     todayLiveData.value = t
                 }
                 override fun onComplete() {
-                    repository.getHistory("irn", "lastdays=${DAYS_AGO+1}")
+                    repository.getHistory("irn", (DAYS_AGO+1).toString())
                         .asyncNetworkRequest()
                         .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable) {
                             override fun onNext(t: JsonObject) {

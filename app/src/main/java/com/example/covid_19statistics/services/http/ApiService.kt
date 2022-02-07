@@ -28,7 +28,7 @@ interface ApiService {
     @GET("historical/{iso3}")
     fun getHistory(
         @Path("iso3") iso3: String,
-        @Query("days") days: String
+        @Query("lastdays") days: String
     ): Observable<JsonObject>
 
 }
