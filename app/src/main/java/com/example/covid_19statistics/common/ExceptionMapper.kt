@@ -19,12 +19,13 @@ class ExceptionMapper {
                        val errorMessage = errorJsonObject.getString("message")
                        return CovidAppEvent(
                            CovidAppEvent.Type.SOMETHING_WRONG,
-                           stringMessage = errorMessage
+                           resMessage = R.string.country_not_found
                        )
                    } catch (exception: Exception) {
                        Timber.e(exception)
                    }
-               } else if (throwable is UnknownHostException || throwable is ConnectException) {
+               }
+            if (throwable is UnknownHostException || throwable is ConnectException) {
                    return CovidAppEvent(CovidAppEvent.Type.CONNECTION_LOST, stringMessage = "")
                }
 

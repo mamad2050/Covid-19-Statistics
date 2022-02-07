@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
@@ -117,7 +118,7 @@ class CountryDetailActivity : CovidAppActivity() {
 
 
         binding.tvCasesChart.text = "نمودار مبتلایان $DAYS_AGO روز گذشته "
-        binding.tvDeathsChart.text =  "نمودار فوتی های $DAYS_AGO روز گذشته "
+        binding.tvDeathsChart.text = "نمودار فوتی های $DAYS_AGO روز گذشته "
 
         Glide.with(this).load(todayStatistic.countryInfo.flag).into(binding.ivCountry)
         binding.tvCountryName.text = todayStatistic.name
@@ -180,6 +181,8 @@ class CountryDetailActivity : CovidAppActivity() {
         when (covidAppEvent.type) {
             CovidAppEvent.Type.SOMETHING_WRONG -> {
                 val connectionView = showSomethingWrong(true)
+                connectionView?.findViewById<TextView>(R.id.tv_error)!!.text =
+                    getString(covidAppEvent.resMessage)
                 connectionView?.findViewById<MaterialButton>(R.id.btnBack)?.setOnClickListener {
                     showSomethingWrong(false)
                     finish()

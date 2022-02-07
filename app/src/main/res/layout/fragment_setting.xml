@@ -106,7 +106,7 @@
                 android:layout_marginTop="8dp"
                 android:alpha="0.5"
                 android:lineSpacingExtra="4dp"
-                android:text="اندازه اعدادی که در هر نمودار نشان داده میشود (درصورتی که بازه زمانی نموار زیاد شود ممکن است موجب در هم رفتگی ارقام شود)"
+                android:text="اندازه اعدادی که در هر نمودار نشان داده میشود (درصورتی که بازه زمانی نمودار زیاد شود ممکن است موجب در هم رفتگی اعداد شود)"
                 android:textSize="13sp" />
 
         </RelativeLayout>

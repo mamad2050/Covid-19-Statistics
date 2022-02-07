@@ -100,19 +100,9 @@ class GlobalFragment : CovidAppFragment() {
 
         viewModel.todayLiveData.observe(viewLifecycleOwner) {
 
-
             todayStatistic = it
 
-
         }
-
-//        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
-//
-//            yesterdayStatistic = it
-//
-//            setStatisticsOnViews()
-//
-//        }
 
         binding.btnInfo.setOnClickListener {
 
@@ -153,12 +143,8 @@ class GlobalFragment : CovidAppFragment() {
         /*set barchart values */
 
 
-//        entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases.toFloat()))
-//        deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths.toFloat()))
-
         entries.add(BarEntry(DAYS_AGO.toFloat() + 1, todayStatistic.todayCases.toFloat()))
         deathEntries.add(BarEntry(DAYS_AGO.toFloat() + 1, todayStatistic.todayDeaths.toFloat()))
-
 
 
         initialBarChart(binding.barchartCases, entries, Color.YELLOW)

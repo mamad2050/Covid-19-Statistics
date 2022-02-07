@@ -8,6 +8,6 @@ class CovidAppEvent(
     val stringMessage: String? = null
 ) {
     enum class Type {
-        SOMETHING_WRONG , CONNECTION_LOST
+          SOMETHING_WRONG , CONNECTION_LOST
     }
 }
