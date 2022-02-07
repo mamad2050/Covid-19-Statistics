@@ -1,4 +1,4 @@
-package com.example.covid_19statistics.data
+package com.example.covid_19statistics.data.model
 
 data class Global(
     val active: Int,

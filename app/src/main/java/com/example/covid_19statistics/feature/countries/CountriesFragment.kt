@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppFragment
 import com.example.covid_19statistics.common.EXTRA_KEY_COUNTRY
-import com.example.covid_19statistics.data.Country
-import com.example.covid_19statistics.data.CountryFa
-import com.example.covid_19statistics.data.CovidAppEvent
+import com.example.covid_19statistics.data.model.Country
+import com.example.covid_19statistics.data.model.CountryFa
+import com.example.covid_19statistics.data.model.CovidAppEvent
 import com.example.covid_19statistics.databinding.FragmentCountriesBinding
 import com.example.covid_19statistics.feature.detailCountry.CountryDetailActivity
 import com.google.android.material.button.MaterialButton

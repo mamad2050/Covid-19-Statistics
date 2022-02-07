@@ -1,7 +1,7 @@
 package com.example.covid_19statistics.common
 
 import com.example.covid_19statistics.R
-import com.example.covid_19statistics.data.CovidAppEvent
+import com.example.covid_19statistics.data.model.CovidAppEvent
 import org.json.JSONObject
 import retrofit2.adapter.rxjava2.HttpException
 
@@ -12,7 +12,7 @@ import java.net.UnknownHostException
 class ExceptionMapper {
 
     companion object{
-        fun map(throwable: Throwable) : CovidAppEvent{
+        fun map(throwable: Throwable) : CovidAppEvent {
                if (throwable is HttpException){
                    try {
                        val errorJsonObject = JSONObject(throwable.response()?.errorBody()!!.string())

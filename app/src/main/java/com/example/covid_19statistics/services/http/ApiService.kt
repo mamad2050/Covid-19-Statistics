@@ -1,8 +1,8 @@
 package com.example.covid_19statistics.services.http
 
 import com.example.covid_19statistics.common.daysAgo
-import com.example.covid_19statistics.data.Country
-import com.example.covid_19statistics.data.Global
+import com.example.covid_19statistics.data.model.Country
+import com.example.covid_19statistics.data.model.Global
 import com.google.gson.JsonObject
 import io.reactivex.Observable
 import okhttp3.OkHttpClient
@@ -12,7 +12,9 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.Part
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
 
@@ -20,20 +22,16 @@ interface ApiService {
     fun getAllCountries(): Observable<List<Country>>
 
     @GET("countries/{iso3}?allowNull=1")
-    fun getTodayCountry(@Path("iso3") location: String): Observable<Country>
-
-    @GET("countries/{iso3}?yesterday=1&allowNull=1")
-    fun getYesterdayCountry(@Path("iso3") location: String): Observable<Country>
+    fun getCountry(@Path("iso3") location: String): Observable<Country>
 
     @GET("all")
     fun getGlobal(): Observable<Global>
 
-
-    @GET("all?yesterday=1&allowNull=1")
-    fun getGlobalYesterday(): Observable<Global>
-
-    @GET("historical/{iso3}?lastdays=${daysAgo + 1}")
-    fun getHistory(@Path("iso3") iso3: String): Observable<JsonObject>
+    @GET("historical/{iso3}")
+    fun getHistory(
+        @Path("iso3") iso3: String,
+        @Query("days") days: String
+    ): Observable<JsonObject>
 
 }
 

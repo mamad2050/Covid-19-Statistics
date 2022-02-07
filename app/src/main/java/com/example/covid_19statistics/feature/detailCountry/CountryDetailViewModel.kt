@@ -2,21 +2,17 @@ package com.example.covid_19statistics.feature.detailCountry
 
 import android.os.Bundle
 import androidx.lifecycle.MutableLiveData
-import com.example.covid_19statistics.common.CovidAppObserver
-import com.example.covid_19statistics.common.CovidAppViewModel
-import com.example.covid_19statistics.common.EXTRA_KEY_COUNTRY
-import com.example.covid_19statistics.common.asyncNetworkRequest
-import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.common.*
+import com.example.covid_19statistics.data.model.Country
 import com.example.covid_19statistics.data.country.CountryRepository
 import com.google.gson.JsonObject
 
 class CountryDetailViewModel(
-    val bundle: Bundle,
-    val repository: CountryRepository
+    private val bundle: Bundle,
+    private val repository: CountryRepository
 ) : CovidAppViewModel() {
 
     var todayLiveData = MutableLiveData<Country>()
-    var yesterdayLiveData = MutableLiveData<Country>()
     var historyLiveData = MutableLiveData<JsonObject>()
 
     init {
@@ -30,7 +26,7 @@ class CountryDetailViewModel(
         todayLiveData.value = bundle.getParcelable(EXTRA_KEY_COUNTRY)
 
 
-        repository.getHistory(todayLiveData.value!!.countryInfo.iso3)
+        repository.getHistory(todayLiveData.value!!.countryInfo.iso3, "lastdays=${daysAgo + 1}")
             .asyncNetworkRequest()
             .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable) {
                 override fun onNext(t: JsonObject) {
@@ -38,22 +34,8 @@ class CountryDetailViewModel(
                 }
 
                 override fun onComplete() {
-
-                    repository.getYesterday(todayLiveData.value!!.countryInfo.iso3)
-                        .asyncNetworkRequest()
-                        .subscribe(object : CovidAppObserver<Country>(compositeDisposable) {
-                            override fun onNext(t: Country) {
-                                yesterdayLiveData.value = t
-                            }
-
-                            override fun onComplete() {
-                                progressBarLiveData.postValue(false)
-                            }
-
-                        })
-
+                    progressBarLiveData.postValue(false)
                 }
-
             })
     }
 

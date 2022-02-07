@@ -12,15 +12,13 @@ import android.view.View
 import android.widget.Toast
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.CovidAppActivity
-import com.example.covid_19statistics.common.ExceptionMapper
-import com.example.covid_19statistics.data.CovidAppEvent
+import com.example.covid_19statistics.data.model.CovidAppEvent
 import com.example.covid_19statistics.databinding.ActivitySplashBinding
 import com.example.covid_19statistics.feature.main.MainActivity
 import com.google.android.material.button.MaterialButton
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
-import java.net.UnknownHostException
 
 
 class SplashActivity : CovidAppActivity() {

@@ -19,4 +19,9 @@
         android:name="com.example.covid_19statistics.feature.countries.CountriesFragment"
         android:label="fragment_countries"
         tools:layout="@layout/fragment_countries" />
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.example.covid_19statistics.feature.setting.SettingFragment"
+        android:label="SettingFragment"
+        tools:layout="@layout/fragment_setting"/>
 </navigation>

@@ -3,7 +3,7 @@ package com.example.covid_19statistics.feature.countries
 import androidx.lifecycle.MutableLiveData
 import com.example.covid_19statistics.common.CovidAppObserver
 import com.example.covid_19statistics.common.CovidAppViewModel
-import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.model.Country
 import com.example.covid_19statistics.data.country.CountryRepository
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -16,10 +16,10 @@ class CountriesViewModel(
 
     init {
 
-showData()
-        }
+        showData()
+    }
 
-    fun showData(){
+    fun showData() {
         progressBarLiveData.value = true
 
         countryRepository.getCountries()
@@ -37,4 +37,4 @@ showData()
             })
     }
 
-    }
+}

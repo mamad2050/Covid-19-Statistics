@@ -14,7 +14,7 @@ import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.decimalFormatter
 import com.example.covid_19statistics.common.implementSpringAnimationTrait
 import com.example.covid_19statistics.common.valueAnimator
-import com.example.covid_19statistics.data.Country
+import com.example.covid_19statistics.data.model.Country
 import kotlin.collections.ArrayList
 
 class CountriesAdapter(

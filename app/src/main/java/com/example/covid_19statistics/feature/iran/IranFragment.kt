@@ -3,30 +3,26 @@ package com.example.covid_19statistics.feature.iran
 import android.annotation.SuppressLint
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
-import com.example.covid_19statistics.data.Country
-import com.example.covid_19statistics.data.CovidAppEvent
-import com.example.covid_19statistics.data.History
+import com.example.covid_19statistics.data.model.Country
+import com.example.covid_19statistics.data.model.CovidAppEvent
+import com.example.covid_19statistics.data.model.History
 import com.example.covid_19statistics.databinding.FragmentIranBinding
 import com.github.mikephil.charting.charts.BarChart
-import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.LargeValueFormatter
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.google.android.material.button.MaterialButton
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.json.JSONObject
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import timber.log.Timber
 
 
 class IranFragment : CovidAppFragment() {
@@ -39,7 +35,6 @@ class IranFragment : CovidAppFragment() {
     private var deathEntries = ArrayList<BarEntry>()
 
     private lateinit var todayStatistic: Country
-    private lateinit var yesterdayStatistic: Country
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,6 +52,16 @@ class IranFragment : CovidAppFragment() {
         }
 
 
+
+
+        viewModel.todayLiveData.observe(viewLifecycleOwner) {
+
+            todayStatistic = it
+
+        }
+
+
+
         viewModel.historyLiveData.observe(viewLifecycleOwner) {
 
 
@@ -67,11 +72,13 @@ class IranFragment : CovidAppFragment() {
 
             for (i in 0 until daysAgo) {
                 val history = History()
-                val date: String? = setHistoriesDate(i + 2)
-                history.cases = jsonCases.getString(date)
-                history.deaths = jsonDeaths.getString(date)
-                history.date = date
-                histories.add(history)
+                val date: String? = setHistoriesDate(i + 1)
+                if (jsonCases.has(date)) {
+                    history.cases = jsonCases.getString(date)
+                    history.deaths = jsonDeaths.getString(date)
+                    history.date = date
+                    histories.add(history)
+                }
             }
 
 
@@ -100,22 +107,7 @@ class IranFragment : CovidAppFragment() {
                 )
             }
 
-        }
-
-
-        viewModel.todayLiveData.observe(viewLifecycleOwner) {
-
-            todayStatistic = it
-
-        }
-
-
-        viewModel.yesterdayLiveData.observe(viewLifecycleOwner) {
-
-            yesterdayStatistic = it
-
             setStatisticsOnViews()
-
         }
 
 
@@ -124,6 +116,87 @@ class IranFragment : CovidAppFragment() {
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun setStatisticsOnViews() {
+
+        /*set total statistics*/
+
+        valueAnimator(todayStatistic.cases.toString(), binding.tvAllCases)
+        valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
+        valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
+        binding.tvUpdated.text =
+            "${getString(R.string.last_updated_at)} ${convertMsToDate(todayStatistic.updated)}"
+
+
+        /*set today statistics*/
+
+        if (todayStatistic.todayCases != null)
+            valueAnimator(todayStatistic.todayCases.toString(), binding.tvTodayCases)
+        else
+            binding.tvTodayCases.text = context?.getString(R.string.not_declare)
+
+        if (todayStatistic.todayRecovered != null)
+            valueAnimator(todayStatistic.todayRecovered.toString(), binding.tvTodayRecovered)
+        else
+            binding.tvTodayRecovered.text = context?.getString(R.string.not_declare)
+
+        if (todayStatistic.todayDeaths != null)
+            valueAnimator(todayStatistic.todayDeaths.toString(), binding.tvTodayDeaths)
+        else
+            binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
+
+        /*set barchart values */
+
+        if (todayStatistic.todayCases != null) {
+            entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
+        } else {
+            entries.add(BarEntry(daysAgo.toFloat() + 1, 0f))
+
+        }
+
+        if (todayStatistic.todayDeaths != null) {
+            deathEntries.add(
+                BarEntry(
+                    daysAgo.toFloat() + 1,
+                    todayStatistic.todayDeaths!!.toFloat()
+                )
+            )
+        } else {
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, 0f))
+        }
+
+
+        initialBarChart(binding.barchartCases, entries, Color.YELLOW)
+        initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun showError(covidAppEvent: CovidAppEvent) {
+        when (covidAppEvent.type) {
+            CovidAppEvent.Type.CONNECTION_LOST -> {
+                val connectionView = showConnectionLost(true)
+                connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
+                    showConnectionLost(false)
+                    viewModel.showData()
+                }
+            }
+
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     private fun initialBarChart(barChart: BarChart, entries: ArrayList<BarEntry>, color: Int) {
@@ -159,115 +232,5 @@ class IranFragment : CovidAppFragment() {
         barChart.isAutoScaleMinMaxEnabled = true
 
     }
-
-    @SuppressLint("SetTextI18n")
-    private fun setStatisticsOnViews() {
-
-        /*set total statistics*/
-
-        valueAnimator(todayStatistic.cases.toString(), binding.tvAllCases)
-        valueAnimator(todayStatistic.recovered.toString(), binding.tvAllRecovered)
-        valueAnimator(todayStatistic.deaths.toString(), binding.tvAllDeaths)
-        binding.tvUpdated.text =
-            "${getString(R.string.last_updated_at)} ${convertMsToDate(todayStatistic.updated)}"
-
-
-        /*set today statistics*/
-
-        if (todayStatistic.todayCases != null)
-            valueAnimator(todayStatistic.todayCases.toString(), binding.tvTodayCases)
-        else
-            binding.tvTodayCases.text = context?.getString(R.string.not_declare)
-
-        if (todayStatistic.todayRecovered != null)
-            valueAnimator(todayStatistic.todayRecovered.toString(), binding.tvTodayRecovered)
-        else
-            binding.tvTodayRecovered.text = context?.getString(R.string.not_declare)
-
-        if (todayStatistic.todayDeaths != null)
-            valueAnimator(todayStatistic.todayDeaths.toString(), binding.tvTodayDeaths)
-        else
-            binding.tvTodayDeaths.text = context?.getString(R.string.not_declare)
-
-        /*set barchart values */
-
-        var counter = 1
-
-
-        if (getYesterdayDate() != histories[0].date ) {
-
-            entries.add(
-                BarEntry(
-                    daysAgo.toFloat() + counter,
-                    yesterdayStatistic.todayCases!!.toFloat()
-                )
-            )
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + counter,
-                    yesterdayStatistic.todayDeaths!!.toFloat()
-                )
-            )
-            counter += 1
-        }
-
-
-        if (todayStatistic.todayCases != null && todayStatistic.todayDeaths != null) {
-
-            entries.add(
-                BarEntry(
-                    daysAgo.toFloat() + counter,
-                    todayStatistic.todayCases!!.toFloat()
-                )
-            )
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + counter,
-                    todayStatistic.todayDeaths!!.toFloat()
-                )
-            )
-
-        } else {
-
-            entries.add(BarEntry(daysAgo.toFloat() + counter, 0f))
-            deathEntries.add(BarEntry(daysAgo.toFloat() + counter, 0f))
-
-        }
-
-
-        if (entries.size == 15) entries.removeAt(12)
-        if (deathEntries.size == 15) deathEntries.removeAt(12)
-
-
-        initialBarChart(binding.barchartCases, entries, Color.YELLOW)
-        initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
-
-
-    }
-
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun showError(covidAppEvent: CovidAppEvent) {
-        when (covidAppEvent.type) {
-            CovidAppEvent.Type.CONNECTION_LOST -> {
-                val connectionView = showConnectionLost(true)
-                connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
-                    showConnectionLost(false)
-                    viewModel.showData()
-                }
-            }
-
-        }
-    }
-
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
-    }
-
 
 }

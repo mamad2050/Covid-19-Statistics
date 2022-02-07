@@ -6,9 +6,9 @@ import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.*
-import com.example.covid_19statistics.data.CovidAppEvent
-import com.example.covid_19statistics.data.Country
-import com.example.covid_19statistics.data.History
+import com.example.covid_19statistics.data.model.CovidAppEvent
+import com.example.covid_19statistics.data.model.Country
+import com.example.covid_19statistics.data.model.History
 import com.example.covid_19statistics.databinding.ActivityDetailCountryBinding
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
@@ -70,11 +70,13 @@ class CountryDetailActivity : CovidAppActivity() {
 
             for (i in 0 until daysAgo) {
                 val history = History()
-                val date: String? = setHistoriesDate(i + 2)
-                history.cases = jsonCases.getString(date)
-                history.deaths = jsonDeaths.getString(date)
-                history.date = date
-                histories.add(history)
+                val date: String? = setHistoriesDate(i + 1)
+                if (jsonCases.has(date)) {
+                    history.cases = jsonCases.getString(date)
+                    history.deaths = jsonDeaths.getString(date)
+                    history.date = date
+                    histories.add(history)
+                }
             }
 
 
@@ -102,51 +104,12 @@ class CountryDetailActivity : CovidAppActivity() {
                     )
                 )
             }
-
-        }
-
-
-        viewModel.yesterdayLiveData.observe(this) {
-            yesterdayStatistic = it
-
             setStatisticsOnViews()
 
         }
 
     }
 
-    private fun initialBarChart(barChart: BarChart, entries: ArrayList<BarEntry>, color: Int) {
-        val barDataSet = BarDataSet(entries, "Statistics")
-        barDataSet.setGradientColor(Color.WHITE, color)
-        val barData = BarData(barDataSet)
-        barData.barWidth = 0.25f
-        barData.setValueTextColor(Color.WHITE)
-        barDataSet.valueFormatter = LargeValueFormatter()
-
-        barChart.animateY(500)
-        barChart.rotation = 360f
-        barChart.destroyDrawingCache()
-        barChart.setBackgroundResource(R.drawable.bg_chart)
-        barChart.data = barData
-        val xAxis = barChart.xAxis
-        xAxis.isEnabled = false
-        val yAxis = barChart.axisLeft
-        yAxis.isEnabled = false
-        val yAxis2 = barChart.axisRight
-        yAxis2.isEnabled = false
-        barDataSet.valueTextSize = 10f
-        barDataSet.valueTypeface = binding.tvCountryName.typeface
-
-        barChart.setDrawBorders(false)
-        barChart.setDrawGridBackground(false)
-        barChart.legend.isEnabled = false
-        barChart.description.isEnabled = false
-        barChart.isDragEnabled = false
-        barChart.setScaleEnabled(false)
-        barChart.setPinchZoom(false)
-        barChart.isAutoScaleMinMaxEnabled = true
-
-    }
 
     private fun setStatisticsOnViews() {
 
@@ -181,104 +144,43 @@ class CountryDetailActivity : CovidAppActivity() {
 
         /*set barchart values */
 
-        var casesCounter = 1
-        var deathCounter = 1
-
-
-        if (getYesterdayDate() != histories[0].date) {
-
-            if (yesterdayStatistic.todayCases != null) {
-                entries.add(
-                    BarEntry(
-                        daysAgo.toFloat() + casesCounter,
-                        yesterdayStatistic.todayCases!!.toFloat()
-                    )
-                )
-                casesCounter += 1
-            } else {
-                entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
-                casesCounter += 1
-            }
-
-
-            if (yesterdayStatistic.todayDeaths != null) {
-                deathEntries.add(
-                    BarEntry(
-                        daysAgo.toFloat() + deathCounter,
-                        yesterdayStatistic.todayDeaths!!.toFloat()
-                    )
-                )
-                deathCounter += 1
-            } else {
-                deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
-                deathCounter += 1
-            }
-
-        }
-
-
-        if (todayStatistic.todayCases != null) {
-
-            entries.add(
-                BarEntry(
-                    daysAgo.toFloat() + casesCounter,
-                    todayStatistic.todayCases!!.toFloat()
-                )
-            )
-
-        } else if (todayStatistic.todayCases == null) {
-
-            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
-        }
-
-        if (todayStatistic.todayDeaths != null) {
-
-            deathEntries.add(
-                BarEntry(
-                    daysAgo.toFloat() + deathCounter,
-                    todayStatistic.todayDeaths!!.toFloat()
-                )
-            )
-
-        } else if (todayStatistic.todayDeaths == null) {
-
-            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
-        }
-
-
 //        var casesCounter = 1
 //        var deathCounter = 1
 //
-//        if (yesterdayStatistic.todayCases != histories[0].cases!!.toInt() && yesterdayStatistic.todayCases != null) {
 //
-//            entries.add(
-//                BarEntry(
-//                    daysAgo.toFloat() + casesCounter,
-//                    yesterdayStatistic.todayCases!!.toFloat()
+//        if (getYesterdayDate() != histories[0].date) {
+//
+//            if (yesterdayStatistic.todayCases != null) {
+//                entries.add(
+//                    BarEntry(
+//                        daysAgo.toFloat() + casesCounter,
+//                        yesterdayStatistic.todayCases!!.toFloat()
+//                    )
 //                )
-//            )
-//            casesCounter += 1
+//                casesCounter += 1
+//            }
 //
-//        } else if (yesterdayStatistic.todayCases == null) {
+////            else if (yesterdayStatistic.todayCases == null) {
+////                entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
+////                casesCounter += 1
+////            }
 //
-//            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
-//            casesCounter += 1
-//        }
 //
-//        if (yesterdayStatistic.todayDeaths != histories[0].deaths!!.toInt() && yesterdayStatistic.todayDeaths != null) {
-//
-//            deathEntries.add(
-//                BarEntry(
-//                    daysAgo.toFloat() + deathCounter,
-//                    yesterdayStatistic.todayDeaths!!.toFloat()
+//            if (yesterdayStatistic.todayDeaths != null) {
+//                deathEntries.add(
+//                    BarEntry(
+//                        daysAgo.toFloat() + deathCounter,
+//                        yesterdayStatistic.todayDeaths!!.toFloat()
+//                    )
 //                )
-//            )
-//            deathCounter += 1
+//                deathCounter += 1
+//            }
 //
-//        } else if (yesterdayStatistic.todayDeaths == null) {
+////            else {
+////                deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
+////                deathCounter += 1
+////            }
 //
-//            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
-//            deathCounter += 1
 //        }
 //
 //
@@ -310,10 +212,23 @@ class CountryDetailActivity : CovidAppActivity() {
 //            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
 //        }
 
+        if (todayStatistic.todayCases != null) {
+            entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
+        } else {
+            entries.add(BarEntry(daysAgo.toFloat() + 1, 0f))
 
-        if (entries.size == 15) entries.removeAt(12)
-        if (deathEntries.size == 15) deathEntries.removeAt(12)
+        }
 
+        if (todayStatistic.todayDeaths != null) {
+            deathEntries.add(
+                BarEntry(
+                    daysAgo.toFloat() + 1,
+                    todayStatistic.todayDeaths!!.toFloat()
+                )
+            )
+        } else {
+            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, 0f))
+        }
 
         initialBarChart(binding.barchartCases, entries, Color.YELLOW)
         initialBarChart(binding.barchartDeaths, deathEntries, Color.RED)
@@ -335,8 +250,8 @@ class CountryDetailActivity : CovidAppActivity() {
             CovidAppEvent.Type.CONNECTION_LOST -> {
                 val connectionView = showConnectionLost(true)
                 connectionView?.findViewById<MaterialButton>(R.id.btn_retry)?.setOnClickListener {
-                 showConnectionLost(false)
-                 viewModel.showData()
+                    showConnectionLost(false)
+                    viewModel.showData()
                 }
             }
 
@@ -353,13 +268,52 @@ class CountryDetailActivity : CovidAppActivity() {
         EventBus.getDefault().unregister(this)
     }
 
-    fun setConfiguration(){
+    private fun setConfiguration() {
 
         val locale = Locale("us")
         Locale.setDefault(locale)
         val configuration: Configuration = baseContext.resources.configuration
         configuration.locale = locale
-        baseContext.resources.updateConfiguration(configuration, baseContext.resources.displayMetrics)
+        baseContext.resources.updateConfiguration(
+            configuration,
+            baseContext.resources.displayMetrics
+        )
 
     }
+
+
+    private fun initialBarChart(barChart: BarChart, entries: ArrayList<BarEntry>, color: Int) {
+        val barDataSet = BarDataSet(entries, "Statistics")
+        barDataSet.setGradientColor(Color.WHITE, color)
+        val barData = BarData(barDataSet)
+        barData.barWidth = 0.25f
+        barData.setValueTextColor(Color.WHITE)
+        barDataSet.valueFormatter = LargeValueFormatter()
+
+        barChart.animateY(500)
+        barChart.rotation = 360f
+        barChart.destroyDrawingCache()
+        barChart.setBackgroundResource(R.drawable.bg_chart)
+        barChart.data = barData
+        val xAxis = barChart.xAxis
+        xAxis.isEnabled = false
+        val yAxis = barChart.axisLeft
+        yAxis.isEnabled = false
+        val yAxis2 = barChart.axisRight
+        yAxis2.isEnabled = false
+        barDataSet.valueTextSize = 10f
+        barDataSet.valueTypeface = binding.tvCountryName.typeface
+
+        barChart.setDrawBorders(false)
+        barChart.setDrawGridBackground(false)
+        barChart.legend.isEnabled = false
+        barChart.description.isEnabled = false
+        barChart.isDragEnabled = false
+        barChart.setScaleEnabled(false)
+        barChart.setPinchZoom(false)
+        barChart.isAutoScaleMinMaxEnabled = true
+
+    }
+
+
 }
