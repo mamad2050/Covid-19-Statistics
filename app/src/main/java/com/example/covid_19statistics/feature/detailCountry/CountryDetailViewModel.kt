@@ -26,7 +26,7 @@ class CountryDetailViewModel(
         todayLiveData.value = bundle.getParcelable(EXTRA_KEY_COUNTRY)
 
 
-        repository.getHistory(todayLiveData.value!!.countryInfo.iso3, "lastdays=${daysAgo + 1}")
+        repository.getHistory(todayLiveData.value!!.countryInfo.iso3, "lastdays=${DAYS_AGO + 1}")
             .asyncNetworkRequest()
             .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable) {
                 override fun onNext(t: JsonObject) {

@@ -1,6 +1,5 @@
 package com.example.covid_19statistics.services.http
 
-import com.example.covid_19statistics.common.daysAgo
 import com.example.covid_19statistics.data.model.Country
 import com.example.covid_19statistics.data.model.Global
 import com.google.gson.JsonObject
@@ -12,7 +11,6 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 

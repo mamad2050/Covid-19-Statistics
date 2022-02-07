@@ -61,7 +61,7 @@ class GlobalFragment : CovidAppFragment() {
             val jsonCases = jsonObject.getJSONObject("cases")
             val jsonDeaths = jsonObject.getJSONObject("deaths")
 
-            for (i in 0 until daysAgo ) {
+            for (i in 0 until DAYS_AGO ) {
                 val history = History()
                 val date: String? = setHistoriesDate(i + 1)
                 if (jsonCases.has(date)) {
@@ -84,13 +84,13 @@ class GlobalFragment : CovidAppFragment() {
 
                 entries.add(
                     BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
+                        DAYS_AGO.toFloat() - i.toFloat(),
                         histories[i].cases!!.toFloat()
                     )
                 )
                 deathEntries.add(
                     BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
+                        DAYS_AGO.toFloat() - i.toFloat(),
                         histories[i].deaths!!.toFloat()
                     )
                 )
@@ -127,10 +127,11 @@ class GlobalFragment : CovidAppFragment() {
     }
 
 
-
     @SuppressLint("SetTextI18n")
     private fun setStatisticsOnViews() {
 
+        binding.tvCasesChart.text = "نمودار مبتلایان $DAYS_AGO روز گذشته "
+        binding.tvDeathsChart.text =  "نمودار فوتی های $DAYS_AGO روز گذشته "
 
         /*set total statistics*/
 
@@ -155,8 +156,8 @@ class GlobalFragment : CovidAppFragment() {
 //        entries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayCases.toFloat()))
 //        deathEntries.add(BarEntry(daysAgo.toFloat() + 1, yesterdayStatistic.todayDeaths.toFloat()))
 
-        entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases.toFloat()))
-        deathEntries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayDeaths.toFloat()))
+        entries.add(BarEntry(DAYS_AGO.toFloat() + 1, todayStatistic.todayCases.toFloat()))
+        deathEntries.add(BarEntry(DAYS_AGO.toFloat() + 1, todayStatistic.todayDeaths.toFloat()))
 
 
 
@@ -194,7 +195,7 @@ class GlobalFragment : CovidAppFragment() {
 
         val barDataSet = BarDataSet(entries, "Statistics")
         barDataSet.setGradientColor(Color.WHITE, color)
-        barDataSet.valueTextSize = 10f
+        barDataSet.valueTextSize = CHART_FONT_SIZE.toFloat()
         barDataSet.valueTypeface = binding.tvCountryName.typeface
         barDataSet.valueFormatter = DefaultValueFormatter(0)
 

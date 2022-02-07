@@ -1,38 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_margin="8dp"
     tools:context=".feature.setting.SettingFragment">
 
-
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
-        <TextView
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:translationZ="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/setting"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.05"
+            android:background="@color/white" />
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="بازه زمانی نمودار"
-        />
+            android:layout_margin="8dp">
 
-        <it.sephiroth.android.library.numberpicker.NumberPicker
-            style="@style/NumberPicker.Outlined"
-            app:picker_max="720"
-            app:picker_min="10"
-            android:progress="14"
-            android:layout_alignParentEnd="true"
-            app:picker_stepSize="2"
-            app:picker_tracker="exponential"
-            app:picker_orientation="vertical"
-            android:id="@+id/numberPicker"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            <TextView
 
-    </RelativeLayout>
+                android:id="@+id/tv_range"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="بازه زمانی نمودار"
+                android:textSize="16sp" />
 
+            <it.sephiroth.android.library.numberpicker.NumberPicker
+                android:id="@+id/numberPicker"
+                style="@style/NumberPicker.Filled"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:progress="14"
+                app:picker_max="720"
+                app:picker_min="10"
+                app:picker_orientation="vertical"
+                app:picker_stepSize="2"
+                app:picker_tracker="exponential" />
+
+            <TextView
+                android:lineSpacingExtra="4dp"
+                android:id="@+id/tv_hint1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_range"
+                android:layout_marginTop="8dp"
+                android:alpha="0.5"
+                android:text="تعداد روز هایی که نمودار نشان می دهد ( پیشفرض : 14 ، حداکثر : 700)"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_hint1"
+                android:layout_marginTop="36dp"
+                android:text="اندازه اعداد نمودار"
+                android:textSize="16sp" />
+
+            <it.sephiroth.android.library.numberpicker.NumberPicker
+                android:id="@+id/size_picker"
+                style="@style/NumberPicker.Filled"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_hint1"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="32dp"
+                android:progress="10"
+                app:picker_max="16"
+                app:picker_min="8"
+                app:picker_orientation="vertical"
+                app:picker_stepSize="1"
+                app:picker_tracker="exponential" />
+
+
+            <TextView
+                android:id="@+id/tv_hint2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_size"
+                android:layout_marginTop="8dp"
+                android:alpha="0.5"
+                android:lineSpacingExtra="4dp"
+                android:text="اندازه اعدادی که در هر نمودار نشان داده میشود (درصورتی که بازه زمانی نموار زیاد شود ممکن است موجب در هم رفتگی ارقام شود)"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

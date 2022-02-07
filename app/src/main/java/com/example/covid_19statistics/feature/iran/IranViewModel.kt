@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.covid_19statistics.common.CovidAppObserver
 import com.example.covid_19statistics.common.CovidAppViewModel
 import com.example.covid_19statistics.common.asyncNetworkRequest
-import com.example.covid_19statistics.common.daysAgo
+import com.example.covid_19statistics.common.DAYS_AGO
 import com.example.covid_19statistics.data.model.Country
 import com.example.covid_19statistics.data.country.CountryRepository
 import com.google.gson.JsonObject
@@ -33,7 +33,7 @@ class IranViewModel(
                     todayLiveData.value = t
                 }
                 override fun onComplete() {
-                    repository.getHistory("irn", "lastdays=${daysAgo+1}")
+                    repository.getHistory("irn", "lastdays=${DAYS_AGO+1}")
                         .asyncNetworkRequest()
                         .subscribe(object : CovidAppObserver<JsonObject>(compositeDisposable) {
                             override fun onNext(t: JsonObject) {

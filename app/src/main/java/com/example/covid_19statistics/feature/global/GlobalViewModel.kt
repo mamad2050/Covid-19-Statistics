@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.covid_19statistics.common.CovidAppObserver
 import com.example.covid_19statistics.common.CovidAppViewModel
 import com.example.covid_19statistics.common.asyncNetworkRequest
-import com.example.covid_19statistics.common.daysAgo
+import com.example.covid_19statistics.common.DAYS_AGO
 import com.example.covid_19statistics.data.model.Global
 import com.example.covid_19statistics.data.global.GlobalRepository
 import com.google.gson.JsonObject
@@ -36,7 +36,7 @@ class GlobalViewModel(
                 override fun onComplete() {
 
                     /* get history statistic */
-                    repository.getHistory("all", "lastdays=${daysAgo+1}" )
+                    repository.getHistory("all", "lastdays=${DAYS_AGO+1}" )
                         .asyncNetworkRequest()
                         .subscribe(object :
                             CovidAppObserver<JsonObject>(compositeDisposable) {

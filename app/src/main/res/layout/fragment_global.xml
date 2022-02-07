@@ -334,14 +334,13 @@
 
 
             <TextView
-                android:id="@+id/tv5"
+                android:id="@+id/tv_cases_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/all_statistics_card"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/cases_barchart_title"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -350,7 +349,7 @@
                 android:id="@+id/barchart_cases"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_below="@id/tv5"
+                android:layout_below="@id/tv_cases_chart"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/bg_chart"
@@ -358,14 +357,13 @@
 
 
             <TextView
-                android:id="@+id/tv6"
+                android:id="@+id/tv_deaths_chart"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/barchart_cases"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@string/deaths_barchart_title"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -373,7 +371,7 @@
                 android:id="@+id/barchart_deaths"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:layout_below="@id/tv6"
+                android:layout_below="@id/tv_deaths_chart"
                 android:layout_marginHorizontal="8dp"
                 android:layout_marginBottom="16dp"
                 android:background="@drawable/bg_chart"

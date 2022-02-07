@@ -1,5 +1,6 @@
 package com.example.covid_19statistics.feature.detailCountry
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
@@ -68,7 +69,7 @@ class CountryDetailActivity : CovidAppActivity() {
             val jsonCases = jsonTimeLine.getJSONObject("cases")
             val jsonDeaths = jsonTimeLine.getJSONObject("deaths")
 
-            for (i in 0 until daysAgo) {
+            for (i in 0 until DAYS_AGO) {
                 val history = History()
                 val date: String? = setHistoriesDate(i + 1)
                 if (jsonCases.has(date)) {
@@ -93,13 +94,13 @@ class CountryDetailActivity : CovidAppActivity() {
 
                 entries.add(
                     BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
+                        DAYS_AGO.toFloat() - i.toFloat(),
                         abs(histories[i].cases!!.toFloat())
                     )
                 )
                 deathEntries.add(
                     BarEntry(
-                        daysAgo.toFloat() - i.toFloat(),
+                        DAYS_AGO.toFloat() - i.toFloat(),
                         abs(histories[i].deaths!!.toFloat())
                     )
                 )
@@ -111,7 +112,12 @@ class CountryDetailActivity : CovidAppActivity() {
     }
 
 
+    @SuppressLint("SetTextI18n")
     private fun setStatisticsOnViews() {
+
+
+        binding.tvCasesChart.text = "نمودار مبتلایان $DAYS_AGO روز گذشته "
+        binding.tvDeathsChart.text =  "نمودار فوتی های $DAYS_AGO روز گذشته "
 
         Glide.with(this).load(todayStatistic.countryInfo.flag).into(binding.ivCountry)
         binding.tvCountryName.text = todayStatistic.name
@@ -144,90 +150,23 @@ class CountryDetailActivity : CovidAppActivity() {
 
         /*set barchart values */
 
-//        var casesCounter = 1
-//        var deathCounter = 1
-//
-//
-//        if (getYesterdayDate() != histories[0].date) {
-//
-//            if (yesterdayStatistic.todayCases != null) {
-//                entries.add(
-//                    BarEntry(
-//                        daysAgo.toFloat() + casesCounter,
-//                        yesterdayStatistic.todayCases!!.toFloat()
-//                    )
-//                )
-//                casesCounter += 1
-//            }
-//
-////            else if (yesterdayStatistic.todayCases == null) {
-////                entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
-////                casesCounter += 1
-////            }
-//
-//
-//            if (yesterdayStatistic.todayDeaths != null) {
-//                deathEntries.add(
-//                    BarEntry(
-//                        daysAgo.toFloat() + deathCounter,
-//                        yesterdayStatistic.todayDeaths!!.toFloat()
-//                    )
-//                )
-//                deathCounter += 1
-//            }
-//
-////            else {
-////                deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
-////                deathCounter += 1
-////            }
-//
-//        }
-//
-//
-//        if (todayStatistic.todayCases != null) {
-//
-//            entries.add(
-//                BarEntry(
-//                    daysAgo.toFloat() + casesCounter,
-//                    todayStatistic.todayCases!!.toFloat()
-//                )
-//            )
-//
-//        } else if (todayStatistic.todayCases == null) {
-//
-//            entries.add(BarEntry(daysAgo.toFloat() + casesCounter, 0f))
-//        }
-//
-//        if (todayStatistic.todayDeaths != null) {
-//
-//            deathEntries.add(
-//                BarEntry(
-//                    daysAgo.toFloat() + deathCounter,
-//                    todayStatistic.todayDeaths!!.toFloat()
-//                )
-//            )
-//
-//        } else if (todayStatistic.todayDeaths == null) {
-//
-//            deathEntries.add(BarEntry(daysAgo.toFloat() + deathCounter, 0f))
-//        }
 
         if (todayStatistic.todayCases != null) {
-            entries.add(BarEntry(daysAgo.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
+            entries.add(BarEntry(DAYS_AGO.toFloat() + 1, todayStatistic.todayCases!!.toFloat()))
         } else {
-            entries.add(BarEntry(daysAgo.toFloat() + 1, 0f))
+            entries.add(BarEntry(DAYS_AGO.toFloat() + 1, 0f))
 
         }
 
         if (todayStatistic.todayDeaths != null) {
             deathEntries.add(
                 BarEntry(
-                    daysAgo.toFloat() + 1,
+                    DAYS_AGO.toFloat() + 1,
                     todayStatistic.todayDeaths!!.toFloat()
                 )
             )
         } else {
-            deathEntries.add(BarEntry(daysAgo.toFloat() + 1, 0f))
+            deathEntries.add(BarEntry(DAYS_AGO.toFloat() + 1, 0f))
         }
 
         initialBarChart(binding.barchartCases, entries, Color.YELLOW)
@@ -301,7 +240,7 @@ class CountryDetailActivity : CovidAppActivity() {
         yAxis.isEnabled = false
         val yAxis2 = barChart.axisRight
         yAxis2.isEnabled = false
-        barDataSet.valueTextSize = 10f
+        barDataSet.valueTextSize = CHART_FONT_SIZE.toFloat()
         barDataSet.valueTypeface = binding.tvCountryName.typeface
 
         barChart.setDrawBorders(false)

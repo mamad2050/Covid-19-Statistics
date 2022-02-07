@@ -5,14 +5,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import com.example.covid_19statistics.BuildConfig
 import com.example.covid_19statistics.R
 import com.example.covid_19statistics.common.TELEGRAM_PAGE_ID
-import com.example.covid_19statistics.common.daysAgo
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.lang.Exception
